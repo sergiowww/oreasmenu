@@ -1,0 +1,26 @@
+#summary Javascript para gerar menus dinâmicos com vários níveis
+#labels Phase-Implementation,Phase-Requirements,Phase-Deploy
+
+= Introdução =
+
+Esse gerador de menu pode ser utilizado com qualquer linguagem, mas o exemplo que eu fiz aqui é em Java com o framework Struts e o plugin struts-menu (http://struts-menu.sourceforge.net/) .
+
+A aplicação exemplo é um WAR que pode ser facilmente instalado no tomcat, os sources também estão disponíveis no download.
+
+A utilização do JS Gerador de menu é bem simples e a Documentação da API está dentro do próprio código, em caso de dúvida, consulte-as!
+Esse JS foi implementado com as mesmas funcionalidades do JS original que vem com o StrutsMenu, porém é bem mais fácil de ler e entender o código, caso precise (totalmente JS OO).
+
+O principal motivo que encontrei para criar uma nova implementação em substituição ao coomenu.js (que vem com o struts menu) foi a falta de flexibilidade quanto ao posicionamento, ele assume somente posições absolutas na tela, ele não fica em qualquer lugar na tela, não é possível inserí-lo dentro de outro elemento, pois ele não possui posição relativa.
+Agora com a nova implementação é possível clicar em um item de menu e abrí-lo em uma nova aba em qualquer navegador, pressionando ctrl e clicando o item de menu, ou clicando com o botão do meio do mouse. Tal característica não existe no coolmenu.js pois os ítens de menu não são links.
+Outro ganho importantíssimo que obtivemos foi a melhoria do código JS que agora é bem mais manutenível (é bem árduo entender o JS do coolmenu, por isso eu não corrigi ele, preferí fazer um novo).
+A nova implementação foi testada em todos os Browsers e não apresentou nenhum problema.
+Para facilitar a substituição do coolmenu.js pela nova implementação mantive o mesmo CSS com os mesmos nomes de estilos
+
+A nova implementação, carinhosamente apelidada de oreasmenu, possui duas dependências: Prototype (http://www.prototypejs.org/) e Scriptaculous (http://script.aculo.us/).
+Então para que funcione, é necessário importar na sua página HTML o Prototype, logo depois o scriptaculous.js (não é necessário importar o restante dos arquivos.js do scriptaculous).
+Por último, importamos o arquivo oreasmenu.js e logo em seguida o oreasmenuConfig.js
+
+
+= Detalhes =
+
+Mais detalhes e downloads em: http://www.wicstech.com.br/artigos/javascript/gerador-de-menus-dinamicos/
