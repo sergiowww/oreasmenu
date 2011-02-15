@@ -11,7 +11,7 @@ var ConfiguracaoMenu = {
 	 * body ou div
 	 * @type HTMLElement
 	 */
-	parentElement: "principal",
+	parentElement: "#{parentElement}",
 	/**
 	 * Posição onde será inserido o menu, para saber as posições do menu consulte a 
 	 * documentação do prototype
@@ -19,7 +19,7 @@ var ConfiguracaoMenu = {
 	 * 
 	 * @type String
 	 */
-	insertion: "top"
+	insertion: "#{insertion}"
 };
 /**
  * Níveis de configuração 
@@ -28,5 +28,5 @@ var ConfiguracaoMenu = {
  * mais níveis orientação horizontal ou vertical, estilo a ser aplicado quando mouseover
  * estilo normal
  */
-FactoryMenu.addNivel(new Nivel(true, "cmMenu", "cmMenuOver", null, 125, 22));
-FactoryMenu.addNivel(new Nivel(false, "cmItem", "cmItemOver", "imagens/Darrow.gif", 150, 20));
+/*FactoryMenu.addNivel(new Nivel(true, "cmMenu", "cmMenuOver", null, 125, 22));
+FactoryMenu.addNivel(new Nivel(false, "cmItem", "cmItemOver", "imagens/Darrow.gif", 150, 20));*/
