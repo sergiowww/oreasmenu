@@ -197,7 +197,7 @@ MenuItem.prototype = {
 	buildItem: function(){
 		if(this.divMenuItem == null){
 			var nivel = this.getNivel();
-			var div = $(Builder.node("div", {style: "margin: 0px;"}));
+			var div = new Element("div", {style: "margin: 0px;"});
 			var width=this.getWidth();
 			var height=this.getHeight();
 			div.setStyle({
@@ -210,9 +210,7 @@ MenuItem.prototype = {
 			var possuiImagem = this.imagem != null;
 			if(possuiImagem){
 				var estilo = "margin-right: 5px; float:left; ";
-				div.appendChild(Builder.node("div", {style: estilo}, [
-					this.getImageLink()
-				]));
+				div.appendChild(new Element("div", {style: estilo}).update(this.getImageLink()));
 			}
 			var adicionarSeta = nivel.imagemSeta != null && this.hasChildNodes();
 			if(adicionarSeta){
@@ -220,14 +218,14 @@ MenuItem.prototype = {
 				if(possuiImagem) {
 					estiloTexto = "float:left;width: 70%;";
 				}
-				div.appendChild(Builder.node("div", {style: estiloTexto}, [this.getLinkTitulo()]));
+				div.appendChild(new Element("div", {style: estiloTexto}).update(this.getLinkTitulo()));
 			}else{
-				div.appendChild(Builder.node("div", [this.getLinkTitulo()]));
+				div.appendChild(new Element("div").update(this.getLinkTitulo()));
 			}
 			if(adicionarSeta){
-				div.appendChild(Builder.node("div", {style: "margin-left:auto; width: 4px; width: 10%;"}, [
-					Builder.node("img", {src: nivel.imagemSeta, style :"vertical-align:middle; margin-top:5px; margin-bottom:5px;"})
-				]));
+				div.appendChild(new Element("div", {style: "margin-left:auto; width: 4px; width: 10%;"}).update(
+					new Element("img", {src: nivel.imagemSeta, style :"vertical-align:middle; margin-top:5px; margin-bottom:5px;"})
+				));
 			}
 			div.addClassName(nivel.estilo);
 			this.divMenuItem = div;
@@ -243,13 +241,13 @@ MenuItem.prototype = {
 				estiloDiv = "float: left;";
 			}
 			if(this.elementoInicial != null){
-				novaDiv = $(Builder.node("div", {className: "cmMenuBorder", style: estiloDiv}, [div]));
+				novaDiv = new Element("div", {className: "cmMenuBorder", style: estiloDiv}).update(div);
 				var ins = new Object();
 				ins[this.insertPosition] = novaDiv; 
 				this.elementoInicial.insert(ins);
 			}else if(this.parentMenuItem != null){
 				div.setStyle({clear: "both"});
-				novaDiv = $(Builder.node("div", {style: "margin:1px;"+estiloDiv}, [div]));
+				novaDiv = new Element("div", {style: "margin:1px;"+estiloDiv}).update(div);
 				
 				this.parentMenuItem.addChildDiv(novaDiv);
 			}
@@ -291,11 +289,11 @@ MenuItem.prototype = {
 	 * @type HTMLElement
 	 */
 	getImageLink: function(){
-		var img = Builder.node("img", {src: this.imagem, alt: this.titulo, style: "vertical-align: middle; border:none;"});
+		var img = new Element("img", {src: this.imagem, alt: this.titulo, style: "vertical-align: middle; border:none;"});
 		if(this.pagina == null){
 			return img;
 		}
-		return Builder.node("a", {href: this.pagina, target: this.getTarget()}, [img]);
+		return new Element("a", {href: this.pagina, target: this.getTarget()}).update(img);
 			
 	},
 	/**
@@ -313,20 +311,17 @@ MenuItem.prototype = {
 	/**
 	 * Retornar o título com o link se houver
 	 * @return o link de título do ítem
-	 * @type HTMLElement
+	 * @type HTMLElement|String
 	 */
 	getLinkTitulo: function(){
-		var textNode = document.createTextNode(this.titulo);
 		if(this.pagina == null){
-			return textNode;
+			return this.titulo;
 		}
 		var estiloLink = "text-decoration:none; ";
 		if(this.imagem != null) {
 			estiloLink = estiloLink.concat("width: 70%; float:left;");
 		}
-		return Builder.node("a", {href: this.pagina, style: estiloLink, target: this.getTarget()}, [
-			textNode
-		]);
+		return new Element("a", {href: this.pagina, style: estiloLink, target: this.getTarget()}).update(this.titulo);
 	},
 	/**
 	 * Construir a área de submenus, que deverá estar inicialmente oculta
@@ -334,7 +329,7 @@ MenuItem.prototype = {
 	buildChildArea: function(){
 		if(this.childArea == null){
 			var indiceNivelVisual = this.getNivel().indiceNivelVisual;
-			var div = $(Builder.node("div", {style: "position: absolute; z-index:"+indiceNivelVisual+";", className: "cmItemBorder"}));
+			var div = new Element("div", {style: "position: absolute; z-index:"+indiceNivelVisual+";", className: "cmItemBorder"});
 			div.hide();
 			this.childArea = div;
 			document.body.appendChild(div);
