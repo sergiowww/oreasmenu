@@ -19,3 +19,5 @@ Para facilitar a substituição do coolmenu.js pela nova implementação mantive
 A nova implementação, carinhosamente apelidada de oreasmenu, depende somente do PrototypeJS (http://www.prototypejs.org/).
 Então para que funcione, é necessário importar na sua página HTML o Prototype.
 Por último, importamos o arquivo oreasmenu.js e logo em seguida o oreasmenuConfig.js
+
+Os arquivos podem ser baixados direto do SCM do google.
