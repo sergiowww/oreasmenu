@@ -3,7 +3,7 @@
 
 = Introdução =
 
-Esse gerador de menu pode ser utilizado com qualquer linguagem, mas o exemplo que eu fiz aqui é em Java com o framework Struts e o plugin struts-menu (http://struts-menu.sourceforge.net/). Recentemente, desenvolvi um componente para Wicket utilizando a mesma biblioteca JS.
+Esse gerador de menu pode ser utilizado com qualquer linguagem, mas o exemplo que eu fiz aqui é em Java com o framework Struts e o plugin struts-menu (http://struts-menu.sourceforge.net/). Recentemente, desenvolvi uma API para Apache Wicket utilizando a mesma biblioteca JS.
 
 A aplicação exemplo é um WAR que pode ser facilmente instalado no tomcat, os sources também estão disponíveis no download.
 
