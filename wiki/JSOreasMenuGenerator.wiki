@@ -20,4 +20,50 @@ A nova implementação, carinhosamente apelidada de oreasmenu, depende somente d
 Então para que funcione, é necessário importar na sua página HTML o Prototype.
 Por último, importamos o arquivo oreasmenu.js e logo em seguida o oreasmenuConfig.js
 
-Os arquivos podem ser baixados direto do SCM do google.
+Uso da API com Wicket:
+{{{
+
+public class SamplePage extends WebPage{
+public SamplePage (){
+add(buildMenu());
+}
+private MenuBar buildMenu() {
+		ArrayList<MenuItem> menus = new ArrayList<MenuItem>();
+		
+		menus.add(
+			new MenuItem(getString("menu.produtos"), getImagemBotao("product.png")).addSubMenu(
+				new MenuItem(getString("menu.produtos.cadastrar"), getImagemBotao("novo_registro.png"), getUrl("produtos/cadastrar")),
+				new MenuItem(getString("menu.produtos.listar"), getImagemBotao("procurar.png"))
+			)
+		);
+		
+		menus.add(
+			new MenuItem(getString("menu.estoque"), getImagemBotao("estoque.png")).addSubMenu(
+				new MenuItem(getString("menu.estoque.cadastrar"), getImagemBotao("add2.png")),
+				new MenuItem(getString("menu.estoque.listar"), getImagemBotao("procurar.png"))
+			)
+		);
+		menus.add(
+			new MenuItem(getString("menu.acesso"), getImagemBotao("acessos.png")).addSubMenu(
+				new MenuItem(getString("menu.acesso.usuarios"), getImagemBotao("usuarios.png")).addSubMenu(
+					new MenuItem(getString("menu.acesso.usuarios.cadastrar"), getImagemBotao("novo_registro.png")),
+					new MenuItem(getString("menu.acesso.usuarios.consultar"), getImagemBotao("procurar.png"))
+				),
+				new MenuItem(getString("menu.acesso.perfis"), getImagemBotao("perfis.png"))
+			)
+		);
+		menus.add(
+			new MenuItem(
+				getString("menu.sair"), 
+				new ResourceReference(AbstractAdminPage.class, "resources/botoes/sair.png"), 
+				getUrl("logout")
+			)
+		);
+		
+		MenuBar menuBar = new MenuBar("principal", menus);
+		menuBar.addNivel(new Nivel(true, "cmMenu", "cmMenuOver", null, 125, 22));
+		menuBar.addNivel(new Nivel(false, "cmItem", "cmItemOver", new ResourceReference(AbstractAdminPage.class, "resources/imagens/Darrow.gif"), 125, 22));
+		return menuBar;
+	}
+}
+}}}
