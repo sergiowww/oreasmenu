@@ -65,5 +65,14 @@ private MenuBar buildMenu() {
 		menuBar.addNivel(new Nivel(false, "cmItem", "cmItemOver", new ResourceReference(AbstractAdminPage.class, "resources/imagens/Darrow.gif"), 125, 22));
 		return menuBar;
 	}
+/**
+	 * retorna a url da página sem parâmetros associados.
+	 * @param class1
+	 * @return
+	 */
+	private CharSequence getUrl(String url) {
+		HttpServletRequest request = getWebRequestCycle().getWebRequest().getHttpServletRequest();
+		return request.getContextPath()+"/"+url;
+	}
 }
 }}}
