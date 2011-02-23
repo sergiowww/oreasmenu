@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>br.com.wicstech</groupId>
   <artifactId>menuoreas</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0</version>
   <description>Menu javascript para Wicket</description>
   <dependencies>
   	<dependency>
