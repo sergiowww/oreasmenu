@@ -27,8 +27,10 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
 	JS_OREASMENU_CONFIG = new ResourceReference(MenuBar.class, "js/oreasmenuConfig.js"),
 	JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
 	
-	private String insertPosition = "top";
-	private String idContainer;
+	private String idContainer, 
+	menuGroup, 
+	insertPosition = "top";
+	
 	private List<Nivel> niveis = new ArrayList<Nivel>();
 	private Integer idMenuItem = 0;
 	
@@ -39,6 +41,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
 	 */
 	public MenuBar(String id, List<MenuItem> menuItens) {
 		super(id, new ListModel<MenuItem>(menuItens));
+		this.menuGroup = id;
 		setOutputMarkupId(true);
 		this.idContainer = getMarkupId();
 	}
@@ -69,9 +72,43 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
 			buildJsMenu(menuItem, javascript, null);
 		}
 		
-		javascript.append("FactoryMenu.construirMenu(menus);");
+		buildNivelConfig(javascript);
+		
 		javascript.append("});");
-		response.renderJavascript(javascript, "buildMenu");
+		response.renderJavascript(javascript, "buildMenu" + menuGroup);
+	}
+
+
+	private void buildNivelConfig(StringBuilder javascript) {
+		String varFactoryMenu = "factory" + menuGroup;
+		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\");\r\n");
+		
+		for (Nivel nivel : this.niveis) {
+			javascript.append(varFactoryMenu+".addNivel(new Nivel(");
+			javascript.append(nivel.isOrientacao());
+			
+			javascript.append(",");
+			javascript.append(getStringParam(nivel.getStyleClass()));
+			javascript.append("");
+			
+			javascript.append(",");
+			javascript.append(getStringParam(nivel.getStyleClassHover()));
+			javascript.append("");
+			
+			if(nivel.getImagemSeta() == null){
+				javascript.append(", null");
+			}else{
+				javascript.append(",");
+				javascript.append(getStringParam(getImageUrl(nivel.getImagemSeta())));
+				javascript.append("");
+			}
+			javascript.append(',');
+			javascript.append(nivel.getWidthDefault());
+			javascript.append(',');
+			javascript.append(nivel.getHeightDefault());
+			javascript.append("));\r\n");
+		}
+		javascript.append(varFactoryMenu+".construirMenu();\r\n");
 	}
 	
 	private String getStringParam(CharSequence valor){
@@ -98,7 +135,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
         javascript.append(',');
         javascript.append(""+menuItem.getHeight());
         javascript.append(',');
-        javascript.append(getStringParam(menuItem.getPage()));
+        javascript.append(getStringParam(menuItem.getUrlDestino()));
         javascript.append(',');
         javascript.append(getStringParam(menuName));
         javascript.append(',');
@@ -140,33 +177,9 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
 		String config = MenuUtil.getResourceContentAsString(JS_OREASMENU_CONFIG);
 		config = StringUtils.replace(config, CONFIG_PART_INSERT_ELEMENT, idContainer);
 		config = StringUtils.replace(config, CONFIG_PART_INSERT_POS, insertPosition);
-		StringBuilder builderConfig = new StringBuilder(config);
-		for (Nivel nivel : this.niveis) {
-			builderConfig.append("FactoryMenu.addNivel(new Nivel(");
-			builderConfig.append(nivel.isOrientacao());
-			
-			builderConfig.append(",");
-			builderConfig.append(getStringParam(nivel.getStyleClass()));
-			builderConfig.append("");
-			
-			builderConfig.append(",");
-			builderConfig.append(getStringParam(nivel.getStyleClassHover()));
-			builderConfig.append("");
-			
-			if(nivel.getImagemSeta() == null){
-				builderConfig.append(", null");
-			}else{
-				builderConfig.append(",");
-				builderConfig.append(getStringParam(getImageUrl(nivel.getImagemSeta())));
-				builderConfig.append("");
-			}
-			builderConfig.append(',');
-			builderConfig.append(nivel.getWidthDefault());
-			builderConfig.append(',');
-			builderConfig.append(nivel.getHeightDefault());
-			builderConfig.append("));\r\n");
-		}
-		response.renderJavascript(builderConfig, "menuBuildConfig");
+		config = StringUtils.replace(config, "/*menuGroup*/", this.menuGroup);
+		
+		response.renderJavascript(config, "menuBuildConfig" + menuGroup);
 	}
 
 

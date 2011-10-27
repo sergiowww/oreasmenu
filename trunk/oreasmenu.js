@@ -23,51 +23,61 @@
  */
 var MenuItem = Class.create();
 MenuItem.prototype = {
+		
 	/**
 	 * Título do menu
 	 * @type String
 	 */
 	titulo: null,
+	
 	/**
 	 * Imagem do item (caminho relativo da imagem)
 	 * @type String
 	 */
 	imagem: null,
+	
 	/**
 	 * Largura do item
 	 * @type Number
 	 */
 	width: null,
+	
 	/**
 	 * Altura do item
 	 * @type Number
 	 */
 	height: null,
+	
 	/**
 	 * Página de destino do link
 	 * @type String
 	 */
 	pagina: null,
+	
 	/**
 	 * Dica do menu
 	 * @type String
 	 */
 	toolTip: null,
+	
 	/**
 	 * Elemento pai desse menu
 	 * @type MenuItem
 	 */
 	parentMenuItem: null,
+	
 	/**
 	 * MenuItem filhos desse menu
 	 * @type Array
 	 */
 	childMenuItem: null,
+	
 	/**
 	 * Nível desse ítem
 	 * @type Nivel
 	 */
 	nivel: null,
+	
 	/**
 	 * Elemento inicial, no caso desse menuItem ser o primeiro nível ele deverá
 	 * ser colocado no elemento inicial definido na configuração
@@ -85,11 +95,13 @@ MenuItem.prototype = {
 	 * @type String
 	 */
 	id: null,
+	
 	/**
 	 * div que representa o ítem de menu
 	 * @type HTMLDivElement
 	 */
 	divMenuItem: null,
+	
 	/**
 	 * Os submenus filhos desse menu deverão estar inseridos dentro dessa div, e estarão
 	 * inicialmente ocultados
@@ -97,6 +109,7 @@ MenuItem.prototype = {
 	 * @type HTMLDivElement
 	 */
 	childArea: null,
+	
 	/**
 	 * posição de inserção no elemento principal da tela
 	 * 
@@ -106,31 +119,43 @@ MenuItem.prototype = {
 	 * @type String
 	 */
 	insertPosition: null,
+	
 	/**
 	 * Destino onde a página deverá ser carregada
 	 * @type String
 	 */
 	target: null,
+	
 	/**
 	 * Função a ser chamada quando o menu for clicado
 	 * @type Function
 	 */
 	onClick: null,
+	
 	/** 
 	 * Função a ser chamada quando o mouse estiver sobre o menu
 	 * @type Function
 	 */
 	onMouseOver: null,
+	
 	/**
 	 * Função a ser chamada quando o mouse estiver fora do menu
 	 * @type Function
 	 */
 	onMouseOut: null,
+	
 	/**
 	 * Alinhamento do menu
 	 * @type String
 	 */
 	align: null,
+	
+	/**
+	 * Grupo de menu ou identificador da barra de menu ao qual esse item de menu pertence.
+	 * @type String
+	 */
+	menuGroup: null,
+	
 	/**
 	 * @constructor
 	 * 
@@ -166,6 +191,7 @@ MenuItem.prototype = {
 		this.target = target;
 		this.align = align;
 	},
+	
 	/**
 	 * Setar o pai desse menu item
 	 * @param {MenuItem} menuItem
@@ -182,6 +208,7 @@ MenuItem.prototype = {
 			this.parentMenuItem.childMenuItem.push(this);
 		}
 	},
+	
 	/**
 	 * Indicar se esse menu deverá ser na posição horizontal
 	 * @return true se é horizontal false se vertical
@@ -190,6 +217,7 @@ MenuItem.prototype = {
 	isHorizontal: function(){
 		return this.getNivel().isHorizontal();
 	},
+	
 	/**
 	 * Construir o item de menu na tela
 	 * @return void
@@ -233,15 +261,13 @@ MenuItem.prototype = {
 			if(this.align != null){
 				div.setStyle({textAlign: this.align});
 			}
-			var larguraNova = null;
-			var alturaNova = null;
 			var novaDiv = null;
 			var estiloDiv = "";
 			if(this.isHorizontal()){
 				estiloDiv = "float: left;";
 			}
 			if(this.elementoInicial != null){
-				novaDiv = new Element("div", {className: "cmMenuBorder", style: estiloDiv}).update(div);
+				novaDiv = new Element("div", {className: this.menuGroup + "-cmMenuBorder", style: estiloDiv}).update(div);
 				var ins = new Object();
 				ins[this.insertPosition] = novaDiv; 
 				this.elementoInicial.insert(ins);
@@ -267,6 +293,7 @@ MenuItem.prototype = {
 			});
 		}
 	},
+	
 	/**
 	 * Adicionar eventos customizados desse botão, que pode se definido no XML
 	 * @private
@@ -283,6 +310,7 @@ MenuItem.prototype = {
 			Event.observe(this.divMenuItem, "mouseover", this.onMouseOver);
 		}
 	},
+	
 	/**
 	 * Retornar a imagem com o link se houver
 	 * @return o elemento imagem
@@ -296,6 +324,7 @@ MenuItem.prototype = {
 		return new Element("a", {href: this.pagina, target: this.getTarget()}).update(img);
 			
 	},
+	
 	/**
 	 * Recuperar target do link
 	 * @return html target
@@ -308,6 +337,7 @@ MenuItem.prototype = {
 		}
 		return target;
 	},
+	
 	/**
 	 * Retornar o título com o link se houver
 	 * @return o link de título do ítem
@@ -323,18 +353,20 @@ MenuItem.prototype = {
 		}
 		return new Element("a", {href: this.pagina, style: estiloLink, target: this.getTarget()}).update(this.titulo);
 	},
+	
 	/**
 	 * Construir a área de submenus, que deverá estar inicialmente oculta
 	 */
 	buildChildArea: function(){
 		if(this.childArea == null){
 			var indiceNivelVisual = this.getNivel().indiceNivelVisual;
-			var div = new Element("div", {style: "position: absolute; z-index:"+indiceNivelVisual+";", className: "cmItemBorder"});
+			var div = new Element("div", {style: "position: absolute; z-index:"+indiceNivelVisual+";", className: this.menuGroup + "-cmItemBorder"});
 			div.hide();
 			this.childArea = div;
 			document.body.appendChild(div);
 		}
 	},
+	
 	/**
 	 * Adicionar uma div como filho na área
 	 * @param {HTMLDivElement} div
@@ -344,6 +376,7 @@ MenuItem.prototype = {
 		this.buildChildArea();
 		this.childArea.appendChild(div);
 	},
+	
 	/**
 	 * Retorna o menuitem construido
 	 * @return menu item construido
@@ -353,6 +386,7 @@ MenuItem.prototype = {
 		this.buildItem();
 		return this.divMenuItem;
 	},
+	
 	/**
 	 * Mostrar a área de submenus associada a esse menuItem
 	 */
@@ -360,6 +394,7 @@ MenuItem.prototype = {
 		this.ajustarPosicao();
 		this.childArea.show();
 	},
+	
 	/**
 	 * Ajustar posição da área de submenus para que fique perto do ítem 
 	 * associado a ela
@@ -383,12 +418,14 @@ MenuItem.prototype = {
 			});
 		}
 	},
+	
 	/**
 	 * Esconder a área de submenus associada a esse item
 	 */
 	hideDivArea: function(){
 		this.childArea.hide();
 	},
+	
 	/**
 	 * Trocar estilo do botão e exibir a área de submenus associada 
 	 * a esse menuItem
@@ -403,6 +440,7 @@ MenuItem.prototype = {
 			this.showDivArea();
 		}
 	},
+	
 	/**
 	 * Voltar o estilo original do menuItem e esconder a área de submenus
 	 * associada a ele
@@ -416,6 +454,7 @@ MenuItem.prototype = {
 			this.hideDivArea();
 		}
 	},
+	
 	/**
 	 * Recuperar o tamanho do item de menu
 	 * @return a largura do item de menu
@@ -431,6 +470,7 @@ MenuItem.prototype = {
 		}
 		return null;
 	},
+	
 	/**
 	 * Recuperar a altura do item
 	 * @return altura do ítem de menu
@@ -446,6 +486,7 @@ MenuItem.prototype = {
 		}
 		return null;
 	},
+	
 	/**
 	 * Retorna o nível associado a esse menuItem
 	 * @return instância da nível associada a esse ítem de menu
@@ -454,6 +495,7 @@ MenuItem.prototype = {
 	getNivel: function(){
 		return this.nivel;
 	},
+	
 	/**
 	 * Setar o nível desse menu
 	 * @param {Nivel} nivel
@@ -462,6 +504,15 @@ MenuItem.prototype = {
 	setNivel: function(nivel){
 		this.nivel = nivel;
 	},
+	
+	/**
+	 * Setar o grupo do menu deste item.
+	 * @param {String} menuGroup
+	 */
+	setMenuGroup: function(menuGroup){
+		this.menuGroup = menuGroup;
+	},
+	
 	/**
 	 * Verificar se existem nós filhos
 	 * @return true se esse menuItem possui menus filhos
@@ -484,11 +535,13 @@ MenuItem.prototype = {
  */
 var Nivel = Class.create();
 Nivel.prototype = {
+		
 	/**
 	 * Indicar se é o nível inicial
 	 * @type Boolean
 	 */
 	nivelInicial: false,
+	
 	/**
 	 * Indicar o tipo de orientação desse nível do menu, se é horizontal ou vertical
 	 * horizontal = true
@@ -496,22 +549,26 @@ Nivel.prototype = {
 	 * @type Boolean
 	 */
 	orientacao: null,
+	
 	/**
 	 * Estilo de todos os ítens de menu desse nível
 	 * @type String
 	 */
 	estilo:null,
+	
 	/**
 	 * Estilo de todos os ítens de menu desse nível quando são focados (mouseover)
 	 * @type String
 	 */
 	estiloHover: null,
+	
 	/**
 	 * Imagem que indicará que esse menú contém submenus
 	 * caminho da imagem
 	 * @type String
 	 */
 	imagemSeta:null,
+	
 	/**
 	 * MenuItem selecionado no nível atual
 	 * @type MenuItem
@@ -523,16 +580,19 @@ Nivel.prototype = {
 	 * @type Number
 	 */
 	widthDefault: null,
+	
 	/**
 	 * Altura padrão dos ítens de menu em pixels
 	 * @type Number
 	 */
 	heightDefault: null,
+	
 	/**
 	 * Indice desse nível
 	 * @type Number
 	 */
 	indiceNivelVisual: null,
+	
 	/**
 	 * @constructor
 	 * @param {Boolean} orientacao		orientação do do menu se é horizontal ou vertical
@@ -551,6 +611,7 @@ Nivel.prototype = {
 		this.widthDefault = width;
 		this.heightDefault = height;
 	},
+	
 	/**
 	 * Verificar se a orientação é horizontal ou vertical
 	 * @return 
@@ -565,7 +626,9 @@ Nivel.prototype = {
  * Factory de menus
  * @class FactoryMenu
  */
-var FactoryMenu = {
+var FactoryMenu = Class.create();
+FactoryMenu.prototype = {
+		
 	/**
 	 * Configuração dos níveis de menu
 	 * será seguido a ordem dos níveis adicionados nesse array, e no caso de existir
@@ -575,11 +638,30 @@ var FactoryMenu = {
 	 * @type Array
 	 */
 	niveis: new Array(),
+	
 	/**
 	 * Menus adicionados, árvore de MenuItem
 	 * @type Array
 	 */
 	menus: null,
+	
+	/**
+	 * Identificador da barra de menus ou grupo de menu.
+	 * @type String
+	 */
+	menuGroup: null,
+	
+	/**
+	 * Construtor da fábrica.
+	 * @param {Array} menus
+	 * @param {String} menuGroup
+	 */
+	initialize: function(menus, menuGroup){
+		this.menuGroup = menuGroup;
+		this.menus = menus;
+		this.niveis = new Array();
+	},
+	
 	/**
 	 * Retorna o objeto nível relativo ao índice passado, se não existir retorna o último
 	 * nível e adiciona o mesmo no final da lista (considerando add == true)
@@ -597,6 +679,7 @@ var FactoryMenu = {
 		}
 		return nivel;
 	},
+	
 	/**
 	 * Adiciona um nível contendo configurações
 	 * @param {Nivel} nivel
@@ -604,28 +687,38 @@ var FactoryMenu = {
 	addNivel: function(nivel){
 		this.niveis.push(nivel);
 	},
+	
 	/**
 	 * Verifica se o mouse está sobre o menu
 	 * @type PeriodicalExecuter
 	 */
 	pe: null,
+	
 	/**
 	 * Indicar se o mouse se encontra sobre o menu atual
 	 * @type Boolean
 	 */
 	mouseSobreMenu: null,
+	
 	/**
-	 * Recebe o array de menus e constroi o mesmo na tela
-	 * @param {Array} menus
-	 */
-	construirMenu: function(menus){
-		this.menus = menus;
-		if(ConfiguracaoMenu.insertion == "top"){
-			menus = menus.reverse();
+	 * Inicia a construção do menu.
+	 */	
+	construirMenu: function(){
+		var configuration = this.getConfiguration();
+		if(configuration.insertion == "top"){
+			this.menus = this.menus.reverse();
 		}
 		var nivelInicio = 0;
-		this.construirSub(menus, nivelInicio);
+		this.construirSub(this.menus, nivelInicio);
 	},
+	
+	/**
+	 * @returns a classe de configuração de acordo com o grupo de menus.
+	 */
+	getConfiguration: function(){
+		return eval("ConfiguracaoMenu" + this.menuGroup);
+	},
+	
 	/**
 	 * Verificar se o mouse está sobre o menu ou não 
 	 * para esconder os menus ativos
@@ -635,6 +728,7 @@ var FactoryMenu = {
 			this.hideOutrosMenus(-1);
 		}
 	},
+	
 	/**
 	 * Função de recursividade para construir todos os níveis do menu
 	 * @param {MenuItem} menuItem
@@ -642,11 +736,13 @@ var FactoryMenu = {
 	 */
 	construirSub: function(menus, indiceNivel){
 		menus.each((function(menuItem){
+			menuItem.setMenuGroup(this.menuGroup);
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;
-				menuItem.elementoInicial = $(ConfiguracaoMenu.parentElement);
-				menuItem.insertPosition = ConfiguracaoMenu.insertion;
+				var configuration = this.getConfiguration();
+				menuItem.elementoInicial = $(configuration.parentElement);
+				menuItem.insertPosition = configuration.insertion;
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
 			menuItem.setNivel(nivel);
@@ -666,6 +762,7 @@ var FactoryMenu = {
 			}
 		}).bind(this));
 	},
+	
 	/**
 	 * Registrar que mouse está sobre um menu
 	 */
@@ -676,6 +773,7 @@ var FactoryMenu = {
 		}
 		this.mouseSobreMenu = true;
 	},
+	
 	/**
 	 * Registrar que o mouse está fora do menu
 	 */
@@ -683,6 +781,7 @@ var FactoryMenu = {
 		this.pe = new PeriodicalExecuter(this.verificarMouseSobreMenu.bind(this), 1);
 		this.mouseSobreMenu = false;
 	},
+	
 	/**
 	 * Quando o usuário passar o mouse sobre um ítem de menu
 	 * @param {MenuItem} menuItem
@@ -692,6 +791,7 @@ var FactoryMenu = {
 		this.toggleMenuItem(menuItem, indiceNivel);
 		this.hideOutrosMenus(indiceNivel);
 	},
+	
 	/**
 	 * Esconder os outros menus, deve ser especificado a partir de qual nível 
 	 * os menus devem ser escondidos, para não esconder todos
@@ -704,6 +804,7 @@ var FactoryMenu = {
 			this.toggleMenuItem(null, outrosNiveis);
 		}
 	},
+	
 	/**
 	 * Desmarcar todos os outros níveis selecionados quando
 	 * um nível superior for marcado
