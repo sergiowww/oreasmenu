@@ -6,6 +6,7 @@
 	<description>Menu javascript para Wicket</description>
 	<build>
 		<finalName>menuoreas</finalName>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -24,7 +24,7 @@ public class MenuItem implements Serializable {
 	/**
 	 * Página de destino do link.
 	 */
-	page,
+	urlDestino,
 
 	/**
 	 * Janela destino do menu (_blank, _self)
@@ -83,14 +83,29 @@ public class MenuItem implements Serializable {
 	 * @param imagem
 	 * @param urlDestino
 	 */
-	public MenuItem(String titulo, ResourceReference imagem,
-			CharSequence urlDestino) {
+	public MenuItem(String titulo, ResourceReference imagem, CharSequence urlDestino) {
 		this.titulo = titulo;
 		this.imagem = imagem;
 		if (urlDestino != null) {
-			this.page = urlDestino.toString();
+			this.urlDestino = urlDestino.toString();
 		}
 	}
+	
+	/**
+	 * Construtor do menu com um título e url de destino do menu.
+	 * 
+	 * @param titulo
+	 * @param imagem
+	 * @param urlDestino
+	 */
+	public MenuItem(String titulo, CharSequence urlDestino) {
+		this.titulo = titulo;
+		if (urlDestino != null) {
+			this.urlDestino = urlDestino.toString();
+		}
+	}
+	
+	
 
 	/**
 	 * Construtor do menu somente com título.
@@ -169,21 +184,21 @@ public class MenuItem implements Serializable {
 	}
 
 	/**
-	 * @see MenuItem#setPage(String)
-	 * @return the page
+	 * @see MenuItem#setUrlDestino(String)
+	 * @return the urlDestino
 	 */
-	public String getPage() {
-		return page;
+	public String getUrlDestino() {
+		return urlDestino;
 	}
 
 	/**
 	 * Atribui a página que será chamada quando o item de menu for clicado.
 	 * 
-	 * @param page
-	 *            the page to set
+	 * @param urlDestino
+	 *            the urlDestino to set
 	 */
-	public void setPage(String page) {
-		this.page = page;
+	public void setUrlDestino(String page) {
+		this.urlDestino = page;
 	}
 
 	/**

@@ -4,7 +4,7 @@
  * configure aqui suas preferências
  * @class ConfiguracaoMenu
  */
-var ConfiguracaoMenu = {
+var ConfiguracaoMenu/*menuGroup*/ = {
 	/**
 	 * Elemento onde o menu deverá ser construído, pode ser qualquer elemento válido
 	 * ou o body ou uma div ou qualquer outra coisa, mas só garanto que funciona com 
