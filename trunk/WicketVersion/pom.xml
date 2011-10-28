@@ -7,6 +7,11 @@
 	<build>
 		<finalName>menuoreas</finalName>
 		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -34,4 +39,24 @@
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>build-jar</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						 <directory>../</directory>
+						 <includes>
+						 	<include>**/oreasmenu.js</include>
+						 	<include>**/oreasmenuConfig.js</include>
+						 </includes>
+						 <targetPath>br/com/wicstech/menuoreas/js</targetPath>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
 </project>
