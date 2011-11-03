@@ -18,7 +18,12 @@ public class Nivel implements Serializable{
 	/**
 	 * Orientação do menu, vertical ou horizontal
 	 */
-	private boolean orientacao;
+	private boolean orientacao,
+	
+	/**
+	 * Indica se as dimensões do item de menu é em % ou em pixels.
+	 */
+	tamanhoRelativo;
 	
 	/**
 	 * Imagem da seta.
@@ -140,5 +145,19 @@ public class Nivel implements Serializable{
 	 */
 	public void setHeightDefault(Integer heightDefault) {
 		this.heightDefault = heightDefault;
+	}
+
+	/**
+	 * @return the tamanhoRelativo
+	 */
+	public boolean isTamanhoRelativo() {
+		return tamanhoRelativo;
+	}
+
+	/**
+	 * @param tamanhoRelativo the tamanhoRelativo to set
+	 */
+	public void setTamanhoRelativo(boolean tamanhoRelativo) {
+		this.tamanhoRelativo = tamanhoRelativo;
 	}
 }
