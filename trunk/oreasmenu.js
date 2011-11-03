@@ -210,6 +210,17 @@ MenuItem.prototype = {
 	},
 	
 	/**
+	 * Unidade de medida para a altura e largura do item de menu.
+	 * @returns{String}
+	 */
+	getUnidadeMedida: function(){
+		if(this.nivel.tamanhoRelativo){
+			return "%";
+		}
+		return "px";
+	},
+	
+	/**
 	 * Indicar se esse menu deverá ser na posição horizontal
 	 * @return true se é horizontal false se vertical
 	 * @type Boolean
@@ -229,8 +240,8 @@ MenuItem.prototype = {
 			var width=this.getWidth();
 			var height=this.getHeight();
 			div.setStyle({
-				width: width+"px",
-				height: height+"px"
+				width: this.nivel.tamanhoRelativo ? "100%" : width+this.getUnidadeMedida(),
+				height: this.nivel.tamanhoRelativo ? "100%" : height+this.getUnidadeMedida()
 			});
 			if(this.toolTip != null){
 				div.title = this.toolTip;
@@ -279,9 +290,9 @@ MenuItem.prototype = {
 			}
 			
 			novaDiv.setStyle({
-				clip: "rect(0px, "+(width+2)+"px, "+(height+2)+"px, 0px)",
-				width: width+"px",
-				height: height+"px",
+				clip: "rect(0px, "+(width+2)+this.getUnidadeMedida()+", "+(height+2)+this.getUnidadeMedida()+", 0px)",
+				width: width+this.getUnidadeMedida(),
+				height: height+this.getUnidadeMedida(),
 				overflow: "hidden",
 				zIndex: nivel.indiceNivelVisual
 			});
@@ -293,6 +304,7 @@ MenuItem.prototype = {
 			});
 		}
 	},
+	
 	
 	/**
 	 * Adicionar eventos customizados desse botão, que pode se definido no XML
@@ -543,6 +555,13 @@ Nivel.prototype = {
 	nivelInicial: false,
 	
 	/**
+	 * Indica se o tamanho dos botões é em porcentagem ou em pixels.
+	 * se <code>false</code> é em pixels, se <code>true</code> é em %.
+	 * @type Boolean
+	 */
+	tamanhoRelativo: false,
+	
+	/**
 	 * Indicar o tipo de orientação desse nível do menu, se é horizontal ou vertical
 	 * horizontal = true
 	 * vertical = false
@@ -601,15 +620,17 @@ Nivel.prototype = {
 	 * @param {String} imagemSeta		caminho da imagem que representa a seta indicando que existe submenus
 	 * @param {Number} width			largura dos ítens de menu desse nível
 	 * @param {Number} height			altura dos ítens de menu desse nível
+	 * @param {Number} tamanhoRelativo  indica se as dimensões dos itens de menu é em % ou em px.
 	 * @return
 	 */
-	initialize: function(orientacao, estilo, estiloHover, imagemSeta, width, height){
+	initialize: function(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo){
 		this.orientacao = orientacao;
 		this.estilo = estilo;
 		this.estiloHover = estiloHover;
 		this.imagemSeta = imagemSeta;
 		this.widthDefault = width;
 		this.heightDefault = height;
+		this.tamanhoRelativo = tamanhoRelativo;
 	},
 	
 	/**
