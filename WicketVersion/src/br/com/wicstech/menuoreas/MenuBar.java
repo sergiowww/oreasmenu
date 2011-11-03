@@ -106,6 +106,8 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor{
 			javascript.append(nivel.getWidthDefault());
 			javascript.append(',');
 			javascript.append(nivel.getHeightDefault());
+			javascript.append(',');
+			javascript.append(nivel.isTamanhoRelativo());
 			javascript.append("));\r\n");
 		}
 		javascript.append(varFactoryMenu+".construirMenu();\r\n");
