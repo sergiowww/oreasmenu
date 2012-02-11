@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ResourceReference;
 
 /**
@@ -22,7 +24,7 @@ public class MenuItem implements Serializable {
 	private String titulo,
 
 	/**
-	 * Página de destino do link.
+	 * Url de destino do link do menu.
 	 */
 	urlDestino,
 
@@ -77,35 +79,64 @@ public class MenuItem implements Serializable {
 	private List<MenuItem> subMenus = new ArrayList<MenuItem>();
 
 	/**
+	 * Página de destino do link.
+	 */
+	private Class<? extends Page> pageClass;
+
+	/**
+	 * Parâmetros da página, se existirem.
+	 */
+	private PageParameters pageParameters;
+
+	/**
+	 * @param titulo
+	 * @param imagem
+	 * @param pageClass
+	 * @param pageParameters
+	 */
+	public MenuItem(String titulo, ResourceReference imagem, Class<? extends Page> pageClass, PageParameters pageParameters) {
+		super();
+		this.titulo = titulo;
+		this.imagem = imagem;
+		this.pageClass = pageClass;
+		this.pageParameters = pageParameters;
+	}
+
+	/**
 	 * Construtor do menu com um título, imagem e url de destino do menu.
 	 * 
 	 * @param titulo
 	 * @param imagem
-	 * @param urlDestino
+	 * @param pageClass
 	 */
-	public MenuItem(String titulo, ResourceReference imagem, CharSequence urlDestino) {
+	public MenuItem(String titulo, ResourceReference imagem, Class<? extends Page> pageClass) {
 		this.titulo = titulo;
 		this.imagem = imagem;
-		if (urlDestino != null) {
-			this.urlDestino = urlDestino.toString();
-		}
+		this.pageClass = pageClass;
 	}
-	
+
 	/**
-	 * Construtor do menu com um título e url de destino do menu.
+	 * Construtor com título e destino.
 	 * 
 	 * @param titulo
-	 * @param imagem
 	 * @param urlDestino
 	 */
-	public MenuItem(String titulo, CharSequence urlDestino) {
+	public MenuItem(String titulo, String urlDestino) {
+		super();
 		this.titulo = titulo;
-		if (urlDestino != null) {
-			this.urlDestino = urlDestino.toString();
-		}
+		this.urlDestino = urlDestino;
 	}
-	
-	
+
+	/**
+	 * Construtor.
+	 * 
+	 * @param titulo
+	 * @param pageClass
+	 */
+	public MenuItem(String titulo, Class<? extends Page> pageClass) {
+		this.titulo = titulo;
+		this.pageClass = pageClass;
+	}
 
 	/**
 	 * Construtor do menu somente com título.
@@ -137,6 +168,7 @@ public class MenuItem implements Serializable {
 
 	/**
 	 * Título ou label do item de menu.
+	 * 
 	 * @param titulo
 	 *            the titulo to set
 	 */
@@ -184,21 +216,21 @@ public class MenuItem implements Serializable {
 	}
 
 	/**
-	 * @see MenuItem#setUrlDestino(String)
-	 * @return the urlDestino
+	 * @see MenuItem#setPageClass(String)
+	 * @return the pageClass
 	 */
-	public String getUrlDestino() {
-		return urlDestino;
+	public Class<? extends Page> getPageClass() {
+		return pageClass;
 	}
 
 	/**
 	 * Atribui a página que será chamada quando o item de menu for clicado.
 	 * 
-	 * @param urlDestino
-	 *            the urlDestino to set
+	 * @param pageClass
+	 *            the pageClass to set
 	 */
-	public void setUrlDestino(String page) {
-		this.urlDestino = page;
+	public void setPageClass(Class<? extends Page> page) {
+		this.pageClass = page;
 	}
 
 	/**
@@ -342,6 +374,36 @@ public class MenuItem implements Serializable {
 	 */
 	void setOnmouseout(String onmouseout) {
 		this.onmouseout = onmouseout;
+	}
+
+	/**
+	 * @return the urlDestino
+	 */
+	public String getUrlDestino() {
+		return urlDestino;
+	}
+
+	/**
+	 * @param urlDestino
+	 *            the urlDestino to set
+	 */
+	public void setUrlDestino(String urlDestino) {
+		this.urlDestino = urlDestino;
+	}
+
+	/**
+	 * @return the pageParameters
+	 */
+	public PageParameters getPageParameters() {
+		return pageParameters;
+	}
+
+	/**
+	 * @param pageParameters
+	 *            the pageParameters to set
+	 */
+	public void setPageParameters(PageParameters pageParameters) {
+		this.pageParameters = pageParameters;
 	}
 
 }
