@@ -1,1 +1,2 @@
-mvn clean install -Pbuild-jar
+call mvn clean install -Pbuild-jar
+pause
