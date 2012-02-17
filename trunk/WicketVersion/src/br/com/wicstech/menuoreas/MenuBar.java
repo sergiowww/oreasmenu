@@ -24,7 +24,8 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	private static final long serialVersionUID = -8683400812756686255L;
 	private static final String CONFIG_PART_INSERT_ELEMENT = "#{parentElement}", CONFIG_PART_INSERT_POS = "#{insertion}";
 
-	private static final ResourceReference JS_PROTOTYPE = new ResourceReference(MenuBar.class, "libraries/prototype.js"), JS_OREASMENU_CONFIG = new ResourceReference(MenuBar.class, "js/oreasmenuConfig.js"), JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
+	private static final ResourceReference JS_PROTOTYPE = new ResourceReference(MenuBar.class, "libraries/prototype.js"), //
+			JS_OREASMENU_CONFIG = new ResourceReference(MenuBar.class, "js/oreasmenuConfig.js"), JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
 
 	private String idContainer, menuGroup, insertPosition = "top";
 
