@@ -3,6 +3,7 @@ package br.com.wicstech.menuoreas;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
@@ -121,7 +122,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		javascript.append("var ");
 		javascript.append(menuName);
 		javascript.append(" = new MenuItem(");
-		javascript.append(getStringParam(menuItem.getTitulo()));
+		javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuItem.getTitulo())));
 		javascript.append(',');
 		javascript.append(getStringParam(getImageUrl(menuItem.getImagem())));
 		javascript.append(',');
@@ -131,7 +132,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		javascript.append(',');
 		javascript.append(getStringParam(getUrlDestino(menuItem)));
 		javascript.append(',');
-		javascript.append(getStringParam(menuName));
+		javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuName)));
 		javascript.append(',');
 		javascript.append(getStringParam(menuItem.getTarget()));
 		javascript.append(',');
