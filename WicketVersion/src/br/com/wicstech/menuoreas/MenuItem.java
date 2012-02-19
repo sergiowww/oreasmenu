@@ -29,11 +29,6 @@ public class MenuItem implements Serializable {
 	urlDestino,
 
 	/**
-	 * Janela destino do menu (_blank, _self)
-	 */
-	target,
-
-	/**
 	 * Alinhamento do texto do menu.
 	 */
 	align,
@@ -84,9 +79,26 @@ public class MenuItem implements Serializable {
 	private Class<? extends Page> pageClass;
 
 	/**
+	 * Janela destino do link do menu.
+	 */
+	private LinkTarget target;
+
+	/**
 	 * Parâmetros da página, se existirem.
 	 */
 	private PageParameters pageParameters;
+
+	/**
+	 * @param titulo
+	 * @param imagem
+	 * @param urlDestino
+	 */
+	public MenuItem(String titulo, ResourceReference imagem, String urlDestino) {
+		super();
+		this.titulo = titulo;
+		this.imagem = imagem;
+		this.urlDestino = urlDestino;
+	}
 
 	/**
 	 * @param titulo
@@ -154,7 +166,8 @@ public class MenuItem implements Serializable {
 	 * @param imagem
 	 */
 	public MenuItem(String titulo, ResourceReference imagem) {
-		this(titulo, imagem, null);
+		this.imagem = imagem;
+		this.titulo = titulo;
 	}
 
 	/**
@@ -171,9 +184,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param titulo
 	 *            the titulo to set
+	 * @return
 	 */
-	public void setTitulo(String titulo) {
+	public MenuItem setTitulo(String titulo) {
 		this.titulo = titulo;
+		return this;
 	}
 
 	/**
@@ -191,9 +206,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param width
 	 *            the width to set
+	 * @return
 	 */
-	public void setWidth(Integer width) {
+	public MenuItem setWidth(Integer width) {
 		this.width = width;
+		return this;
 	}
 
 	/**
@@ -210,9 +227,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param height
 	 *            the height to set
+	 * @return
 	 */
-	public void setHeight(Integer height) {
+	public MenuItem setHeight(Integer height) {
 		this.height = height;
+		return this;
 	}
 
 	/**
@@ -228,9 +247,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param pageClass
 	 *            the pageClass to set
+	 * @return
 	 */
-	public void setPageClass(Class<? extends Page> page) {
+	public MenuItem setPageClass(Class<? extends Page> page) {
 		this.pageClass = page;
+		return this;
 	}
 
 	/**
@@ -246,26 +267,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param toolTip
 	 *            the toolTip to set
+	 * @return
 	 */
-	public void setToolTip(String toolTip) {
+	public MenuItem setToolTip(String toolTip) {
 		this.toolTip = toolTip;
-	}
-
-	/**
-	 * Alvo da janela que se abrirá quando o item de menu for clicado.
-	 * 
-	 * @return the target
-	 */
-	public String getTarget() {
-		return target;
-	}
-
-	/**
-	 * @param target
-	 *            the target to set
-	 */
-	public void setTarget(String target) {
-		this.target = target;
+		return this;
 	}
 
 	/**
@@ -280,9 +286,11 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param align
 	 *            the align to set
+	 * @return
 	 */
-	public void setAlign(String align) {
+	public MenuItem setAlign(String align) {
 		this.align = align;
+		return this;
 	}
 
 	/**
@@ -308,7 +316,7 @@ public class MenuItem implements Serializable {
 	/**
 	 * @return the imagem
 	 */
-	ResourceReference getImagem() {
+	public ResourceReference getImagem() {
 		return imagem;
 	}
 
@@ -317,15 +325,17 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param imagem
 	 *            the imagem to set
+	 * @return
 	 */
-	void setImagem(ResourceReference imagem) {
+	public MenuItem setImagem(ResourceReference imagem) {
 		this.imagem = imagem;
+		return this;
 	}
 
 	/**
 	 * @return the onclick
 	 */
-	String getOnclick() {
+	public String getOnclick() {
 		return onclick;
 	}
 
@@ -334,16 +344,18 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param onclick
 	 *            the onclick to set
+	 * @return
 	 */
-	void setOnclick(String onclick) {
+	public MenuItem setOnclick(String onclick) {
 		this.onclick = onclick;
+		return this;
 	}
 
 	/**
 	 * @see MenuItem#setOnmouseover(String)
 	 * @return the onmouseover
 	 */
-	String getOnmouseover() {
+	public String getOnmouseover() {
 		return onmouseover;
 	}
 
@@ -353,16 +365,18 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param onmouseover
 	 *            the onmouseover to set
+	 * @return
 	 */
-	void setOnmouseover(String onmouseover) {
+	public MenuItem setOnmouseover(String onmouseover) {
 		this.onmouseover = onmouseover;
+		return this;
 	}
 
 	/**
 	 * @see MenuItem#setOnmouseout(String)
 	 * @return the onmouseout
 	 */
-	String getOnmouseout() {
+	public String getOnmouseout() {
 		return onmouseout;
 	}
 
@@ -371,12 +385,16 @@ public class MenuItem implements Serializable {
 	 * 
 	 * @param onmouseout
 	 *            the onmouseout to set
+	 * @return
 	 */
-	void setOnmouseout(String onmouseout) {
+	public MenuItem setOnmouseout(String onmouseout) {
 		this.onmouseout = onmouseout;
+		return this;
 	}
 
 	/**
+	 * URL de destino do item de menu clicado.
+	 * 
 	 * @return the urlDestino
 	 */
 	public String getUrlDestino() {
@@ -384,14 +402,21 @@ public class MenuItem implements Serializable {
 	}
 
 	/**
+	 * URL de destino do link, quando não especificada o parâmetro
+	 * {@link MenuItem#getPageClass()} deve ser especificado.
+	 * 
 	 * @param urlDestino
 	 *            the urlDestino to set
+	 * @return
 	 */
-	public void setUrlDestino(String urlDestino) {
+	public MenuItem setUrlDestino(String urlDestino) {
 		this.urlDestino = urlDestino;
+		return this;
 	}
 
 	/**
+	 * Parâmetros da página de destino do link.
+	 * 
 	 * @return the pageParameters
 	 */
 	public PageParameters getPageParameters() {
@@ -399,11 +424,36 @@ public class MenuItem implements Serializable {
 	}
 
 	/**
+	 * @see MenuItem#getPageParameters()
+	 * 
 	 * @param pageParameters
 	 *            the pageParameters to set
+	 * @return
 	 */
-	public void setPageParameters(PageParameters pageParameters) {
+	public MenuItem setPageParameters(PageParameters pageParameters) {
 		this.pageParameters = pageParameters;
+		return this;
+	}
+
+	/**
+	 * Alvo da janela que se abrirá quando o item de menu for clicado.
+	 * 
+	 * @return the target
+	 */
+	public LinkTarget getTarget() {
+		return target;
+	}
+
+	/**
+	 * @see MenuItem#getTarget()
+	 * 
+	 * @param target
+	 *            the target to set
+	 * @return
+	 */
+	public MenuItem setTarget(LinkTarget target) {
+		this.target = target;
+		return this;
 	}
 
 }

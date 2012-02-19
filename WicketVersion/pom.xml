@@ -59,4 +59,8 @@
 			</build>
 		</profile>
 	</profiles>
+	<scm>
+		<developerConnection>Sergio Eduardo D Oliveira</developerConnection>
+		<url>http://www.linkedin.com/pub/sergio-eduardo-dantas-de-oliveira/47/938/165</url>
+	</scm>
 </project>

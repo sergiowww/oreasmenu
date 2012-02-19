@@ -253,9 +253,9 @@ MenuItem.prototype = {
 			}
 			var adicionarSeta = nivel.imagemSeta != null && this.hasChildNodes();
 			if(adicionarSeta){
-				var estiloTexto = "";
+				var estiloTexto = "float:left;";
 				if(possuiImagem) {
-					estiloTexto = "float:left;width: 70%;";
+					estiloTexto += "width: 70%;";
 				}
 				div.appendChild(new Element("div", {style: estiloTexto}).update(this.getLinkTitulo()));
 			}else{
