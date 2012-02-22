@@ -170,7 +170,6 @@ MenuItem.prototype = {
 	 * @param {Function} onMouseOver		Função a ser chamada quando o mouse estiver dentro do menu
 	 * @param {Function} onMouseOut			Função a ser chamada quando o mouse estiver fora do menu
 	 * @param {String} align				Alinhamento do menu, que pode ser definido também no CSS
-	 * @return
 	 */
 	initialize: function(titulo, imagem, width, height, pagina, id, target, onClick, onMouseOver, onMouseOut, align){
 		//se o identificador for nulo cria um id para ele
@@ -195,7 +194,7 @@ MenuItem.prototype = {
 	/**
 	 * Setar o pai desse menu item
 	 * @param {MenuItem} menuItem
-	 * @return void
+	 * @returns void
 	 */
 	setParentMenuItem: function(menuItem){
 		if(menuItem != null){
@@ -211,7 +210,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Unidade de medida para a altura e largura do item de menu.
-	 * @returns{String}
+	 * @returns String
 	 */
 	getUnidadeMedida: function(){
 		if(this.nivel.tamanhoRelativo){
@@ -222,7 +221,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Indicar se esse menu deverá ser na posição horizontal
-	 * @return true se é horizontal false se vertical
+	 * @returns Boolean true se é horizontal false se vertical
 	 * @type Boolean
 	 */
 	isHorizontal: function(){
@@ -231,7 +230,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Construir o item de menu na tela
-	 * @return void
+	 * @returns void
 	 */
 	buildItem: function(){
 		if(this.divMenuItem == null){
@@ -309,7 +308,7 @@ MenuItem.prototype = {
 	/**
 	 * Adicionar eventos customizados desse botão, que pode se definido no XML
 	 * @private
-	 * @return void
+	 * @returns void
 	 */
 	adicionarEventosCustom: function(){
 		if(this.onClick != null){
@@ -325,7 +324,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Retornar a imagem com o link se houver
-	 * @return o elemento imagem
+	 * @returns o elemento imagem
 	 * @type HTMLElement
 	 */
 	getImageLink: function(){
@@ -339,7 +338,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Recuperar target do link
-	 * @return html target
+	 * @returns html target
 	 * @type String
 	 */
 	getTarget: function(){
@@ -352,7 +351,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Retornar o título com o link se houver
-	 * @return o link de título do ítem
+	 * @returns o link de título do ítem
 	 * @type HTMLElement|String
 	 */
 	getLinkTitulo: function(){
@@ -382,7 +381,7 @@ MenuItem.prototype = {
 	/**
 	 * Adicionar uma div como filho na área
 	 * @param {HTMLDivElement} div
-	 * @return
+	 * @returns void
 	 */
 	addChildDiv: function(div){
 		this.buildChildArea();
@@ -391,7 +390,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Retorna o menuitem construido
-	 * @return menu item construido
+	 * @returns menu item construido
 	 * @type HTMLDivElement
 	 */
 	getDivMenuItem: function(){
@@ -442,7 +441,7 @@ MenuItem.prototype = {
 	 * Trocar estilo do botão e exibir a área de submenus associada 
 	 * a esse menuItem
 	 * 
-	 * @return
+	 * @returns
 	 */
 	mouseOver: function(){
 		var nivel=this.getNivel();
@@ -456,7 +455,7 @@ MenuItem.prototype = {
 	/**
 	 * Voltar o estilo original do menuItem e esconder a área de submenus
 	 * associada a ele
-	 * @return
+	 * @returns
 	 */
 	mouseOut: function(){
 		var nivel = this.getNivel();
@@ -469,7 +468,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Recuperar o tamanho do item de menu
-	 * @return a largura do item de menu
+	 * @returns a largura do item de menu
 	 * @type Number
 	 */
 	getWidth: function(){
@@ -485,7 +484,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Recuperar a altura do item
-	 * @return altura do ítem de menu
+	 * @returns altura do ítem de menu
 	 * @type Number
 	 */
 	getHeight: function(){
@@ -501,7 +500,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Retorna o nível associado a esse menuItem
-	 * @return instância da nível associada a esse ítem de menu
+	 * @returns instância da nível associada a esse ítem de menu
 	 * @type Nivel
 	 */
 	getNivel: function(){
@@ -511,7 +510,7 @@ MenuItem.prototype = {
 	/**
 	 * Setar o nível desse menu
 	 * @param {Nivel} nivel
-	 * @return void
+	 * @returns void
 	 */
 	setNivel: function(nivel){
 		this.nivel = nivel;
@@ -527,7 +526,7 @@ MenuItem.prototype = {
 	
 	/**
 	 * Verificar se existem nós filhos
-	 * @return true se esse menuItem possui menus filhos
+	 * @returns true se esse menuItem possui menus filhos
 	 * @type Boolean
 	 */
 	hasChildNodes: function(){
@@ -621,7 +620,6 @@ Nivel.prototype = {
 	 * @param {Number} width			largura dos ítens de menu desse nível
 	 * @param {Number} height			altura dos ítens de menu desse nível
 	 * @param {Number} tamanhoRelativo  indica se as dimensões dos itens de menu é em % ou em px.
-	 * @return
 	 */
 	initialize: function(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo){
 		this.orientacao = orientacao;
@@ -635,7 +633,7 @@ Nivel.prototype = {
 	
 	/**
 	 * Verificar se a orientação é horizontal ou vertical
-	 * @return 
+	 * @returns 
 	 * @type Boolean
 	 */
 	isHorizontal: function(){
@@ -689,7 +687,7 @@ FactoryMenu.prototype = {
 	 * 
 	 * @param {Number} indice
 	 * @param {Boolean} add indica se esse índice deverá ser adicionado
-	 * @return instância do nível que foi adicionada
+	 * @returns instância do nível que foi adicionada
 	 * @type Nivel
 	 */
 	getNivel: function(indice, add){
