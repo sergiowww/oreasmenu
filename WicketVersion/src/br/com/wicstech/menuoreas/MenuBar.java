@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
@@ -22,12 +21,13 @@ import org.apache.wicket.model.util.ListModel;
 public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private static final long serialVersionUID = -8683400812756686255L;
-	private static final String CONFIG_PART_INSERT_ELEMENT = "#{parentElement}", CONFIG_PART_INSERT_POS = "#{insertion}";
 
 	private static final ResourceReference JS_PROTOTYPE = new ResourceReference(MenuBar.class, "libraries/prototype.js"), //
-			JS_OREASMENU_CONFIG = new ResourceReference(MenuBar.class, "js/oreasmenuConfig.js"), JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
+			JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
 
-	private String idContainer, menuGroup, insertPosition = "top";
+	private String idContainer, //
+			menuGroup, //
+			insertPosition = "top";
 
 	private List<Nivel> niveis = new ArrayList<Nivel>();
 	private Integer idMenuItem = 0;
@@ -57,13 +57,12 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	public void renderHead(IHeaderResponse response) {
 		response.renderJavascriptReference(JS_PROTOTYPE, "prototype");
 		response.renderJavascriptReference(JS_OREASMENU, "oreasmenu");
-		renderConfig(response);
 		renderMenu(response);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void renderMenu(IHeaderResponse response) {
-		StringBuilder javascript = new StringBuilder("Event.observe(window, \"load\", function(){");
+		StringBuilder javascript = new StringBuilder();
 		javascript.append("var menus = new Array();\r\n");
 		List<MenuItem> menuItens = (List<MenuItem>) getDefaultModelObject();
 		for (MenuItem menuItem : menuItens) {
@@ -72,13 +71,12 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 		buildNivelConfig(javascript);
 
-		javascript.append("});");
-		response.renderJavascript(javascript, "buildMenu" + menuGroup);
+		response.renderOnLoadJavascript(javascript.toString());
 	}
 
 	private void buildNivelConfig(StringBuilder javascript) {
 		String varFactoryMenu = "factory" + menuGroup;
-		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\");\r\n");
+		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\", \"" + idContainer + "\", \"" + insertPosition + "\");\r\n");
 
 		for (Nivel nivel : this.niveis) {
 			javascript.append(varFactoryMenu + ".addNivel(new Nivel(");
@@ -107,7 +105,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(nivel.isTamanhoRelativo());
 			javascript.append("));\r\n");
 		}
-		javascript.append(varFactoryMenu + ".construirMenu();\r\n");
+		javascript.append(varFactoryMenu + ".construirMenu()");
 	}
 
 	private String getStringParam(CharSequence valor) {
@@ -173,15 +171,6 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			return RequestCycle.get().urlFor(imagem);
 		}
 		return null;
-	}
-
-	private void renderConfig(IHeaderResponse response) {
-		String config = MenuUtil.getResourceContentAsString(JS_OREASMENU_CONFIG);
-		config = StringUtils.replace(config, CONFIG_PART_INSERT_ELEMENT, idContainer);
-		config = StringUtils.replace(config, CONFIG_PART_INSERT_POS, insertPosition);
-		config = StringUtils.replace(config, "/*menuGroup*/", this.menuGroup);
-
-		response.renderJavascript(config, "menuBuildConfig" + menuGroup);
 	}
 
 	/**
