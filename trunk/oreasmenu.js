@@ -647,7 +647,23 @@ Nivel.prototype = {
  */
 var FactoryMenu = Class.create();
 FactoryMenu.prototype = {
-		
+	/**
+	 * Elemento onde o menu deverá ser construído, pode ser qualquer elemento válido
+	 * ou o body ou uma div ou qualquer outra coisa, mas só garanto que funciona com 
+	 * body ou div
+	 * @type HTMLElement
+	 */
+	parentElement: null,
+	
+	/**
+	 * Posição onde será inserido o menu, para saber as posições do menu consulte a 
+	 * documentação do prototype
+	 * @see Element#insert
+	 * 
+	 * @type String
+	 */
+	insertion: null,
+	
 	/**
 	 * Configuração dos níveis de menu
 	 * será seguido a ordem dos níveis adicionados nesse array, e no caso de existir
@@ -674,11 +690,15 @@ FactoryMenu.prototype = {
 	 * Construtor da fábrica.
 	 * @param {Array} menus
 	 * @param {String} menuGroup
+	 * @param {String|HTMLElement} parentElement
+	 * @param {String} insertion
 	 */
-	initialize: function(menus, menuGroup){
+	initialize: function(menus, menuGroup, parentElement, insertion){
 		this.menuGroup = menuGroup;
 		this.menus = menus;
 		this.niveis = new Array();
+		this.parentElement = parentElement;
+		this.insertion = insertion;
 	},
 	
 	/**
@@ -723,19 +743,11 @@ FactoryMenu.prototype = {
 	 * Inicia a construção do menu.
 	 */	
 	construirMenu: function(){
-		var configuration = this.getConfiguration();
-		if(configuration.insertion == "top"){
+		if(this.insertion == "top"){
 			this.menus = this.menus.reverse();
 		}
 		var nivelInicio = 0;
 		this.construirSub(this.menus, nivelInicio);
-	},
-	
-	/**
-	 * @returns a classe de configuração de acordo com o grupo de menus.
-	 */
-	getConfiguration: function(){
-		return eval("ConfiguracaoMenu" + this.menuGroup);
 	},
 	
 	/**
@@ -759,9 +771,8 @@ FactoryMenu.prototype = {
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;
-				var configuration = this.getConfiguration();
-				menuItem.elementoInicial = $(configuration.parentElement);
-				menuItem.insertPosition = configuration.insertion;
+				menuItem.elementoInicial = $(this.parentElement);
+				menuItem.insertPosition = this.insertion;
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
 			menuItem.setNivel(nivel);
@@ -797,7 +808,7 @@ FactoryMenu.prototype = {
 	 * Registrar que o mouse está fora do menu
 	 */
 	registrarMouseOut: function(){
-		this.pe = new PeriodicalExecuter(this.verificarMouseSobreMenu.bind(this), 1);
+		this.pe = new PeriodicalExecuter(this.verificarMouseSobreMenu.bind(this), 0.5);
 		this.mouseSobreMenu = false;
 	},
 	
