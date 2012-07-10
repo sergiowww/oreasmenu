@@ -62,13 +62,13 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	@SuppressWarnings("unchecked")
 	private void renderMenu(IHeaderResponse response) {
+		idMenuItem = 0;
 		StringBuilder javascript = new StringBuilder();
 		javascript.append("var menus = new Array();\r\n");
 		List<MenuItem> menuItens = (List<MenuItem>) getDefaultModelObject();
 		for (MenuItem menuItem : menuItens) {
 			buildJsMenu(menuItem, javascript, null);
 		}
-
 		buildNivelConfig(javascript);
 
 		response.renderOnLoadJavascript(javascript.toString());
