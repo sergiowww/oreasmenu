@@ -7,10 +7,13 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.util.string.JavascriptUtils;
 
 /**
  * Barra de menu.
@@ -60,18 +63,33 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		renderMenu(response);
 	}
 
+	@Override
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+		super.onComponentTagBody(markupStream, openTag);
+		JavascriptUtils.writeOpenTag(getResponse());
+		getResponse().write("MenuBar.");
+		getResponse().write(this.idContainer);
+		getResponse().write("();");
+
+		JavascriptUtils.writeCloseTag(getResponse());
+	}
+
 	@SuppressWarnings("unchecked")
 	private void renderMenu(IHeaderResponse response) {
 		idMenuItem = 0;
-		StringBuilder javascript = new StringBuilder();
+		StringBuilder javascript = new StringBuilder("if(typeof MenuBar == \"undefined\"){MenuBar = new Object();}");
+		javascript.append("MenuBar.");
+		javascript.append(this.idContainer);
+		javascript.append("= function(){");
+
 		javascript.append("var menus = new Array();\r\n");
 		List<MenuItem> menuItens = (List<MenuItem>) getDefaultModelObject();
 		for (MenuItem menuItem : menuItens) {
 			buildJsMenu(menuItem, javascript, null);
 		}
 		buildNivelConfig(javascript);
-
-		response.renderOnLoadJavascript(javascript.toString());
+		javascript.append(";}");
+		response.renderJavascript(javascript.toString(), "javascript" + getMarkupId());
 	}
 
 	private void buildNivelConfig(StringBuilder javascript) {
