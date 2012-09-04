@@ -31,6 +31,12 @@ MenuItem.prototype = {
 	titulo: null,
 	
 	/**
+	 * Dica do item de menu.
+	 * @type String
+	 */
+	hint: null,
+	
+	/**
 	 * Imagem do item (caminho relativo da imagem)
 	 * @type String
 	 */
@@ -251,14 +257,22 @@ MenuItem.prototype = {
 				div.appendChild(new Element("div", {style: estilo}).update(this.getImageLink()));
 			}
 			var adicionarSeta = nivel.imagemSeta != null && this.hasChildNodes();
+			
+			/**
+			 * @type HTMLDivElement
+			 */
+			var divLinkTitulo = this.getDivLinkTitulo();
+			
 			if(adicionarSeta){
-				var estiloTexto = "float:left;";
+				var estiloLink = new Hash();
+				estiloLink.set("float", "left");
 				if(possuiImagem) {
-					estiloTexto += "width: 70%;";
+					estiloLink.set("width", "70%");
 				}
-				div.appendChild(new Element("div", {style: estiloTexto}).update(this.getLinkTitulo()));
+				divLinkTitulo.setStyle(estiloLink.toObject());
+				div.appendChild(divLinkTitulo);
 			}else{
-				div.appendChild(new Element("div").update(this.getLinkTitulo()));
+				div.appendChild(divLinkTitulo);
 			}
 			if(adicionarSeta){
 				div.appendChild(new Element("div", {style: "margin-left:auto; width: 4px; width: 10%;"}).update(
@@ -350,9 +364,33 @@ MenuItem.prototype = {
 	},
 	
 	/**
+	 * Retorna a div contendo o link ou somente o título do item.
+	 * @returns {HTMLDivElement}
+	 */
+	getDivLinkTitulo: function() {
+		/**
+		 * @type HTMLAnchorElement|String
+		 */
+		var linkOuTexto = this.getLinkTitulo();
+		
+		/**
+		 * @type HTMLDivElement
+		 */
+		var divRetorno = new Element("div");
+		if (this.hint != null) {
+			if (Object.isString(linkOuTexto)) {
+				divRetorno.title = this.hint;
+			}else{
+				linkOuTexto.title = this.hint;
+			}
+		}
+		return divRetorno.update(linkOuTexto);
+	},
+	
+	/**
 	 * Retornar o título com o link se houver
 	 * @returns o link de título do ítem
-	 * @type HTMLElement|String
+	 * @type HTMLAnchorElement|String
 	 */
 	getLinkTitulo: function(){
 		if(this.pagina == null){

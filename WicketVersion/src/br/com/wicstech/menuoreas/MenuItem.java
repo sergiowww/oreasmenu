@@ -171,6 +171,19 @@ public class MenuItem implements Serializable {
 	}
 
 	/**
+	 * Construtor com o hint do item de menu.
+	 * 
+	 * @param titulo
+	 * @param imagem
+	 * @param pageClass
+	 * @param toolTip
+	 */
+	public MenuItem(String titulo, ResourceReference imagem, Class<? extends Page> pageClass, String toolTip) {
+		this(titulo, imagem, pageClass);
+		this.toolTip = toolTip;
+	}
+
+	/**
 	 * @see MenuItem#getTitulo()
 	 * 
 	 * @return the titulo
