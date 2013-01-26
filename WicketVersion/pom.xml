@@ -50,8 +50,7 @@
 					<resource>
 						 <directory>../</directory>
 						 <includes>
-						 	<include>**/oreasmenu.js</include>
-						 	<include>**/oreasmenuConfig.js</include>
+						 	<include>oreasmenu.js</include>
 						 </includes>
 						 <targetPath>br/com/wicstech/menuoreas/js</targetPath>
 					</resource>
