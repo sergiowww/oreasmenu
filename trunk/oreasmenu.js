@@ -1,17 +1,10 @@
 /**
  * Gerador de menus, mais um produto das organizações Orelhas!!!
- * Resolví desenvolver esse gerador de menus em substituição ao maldito coolmenus.js que é o Javascript
- * mais horrível que existe na face da terra, é tão feio que parece que foi ofuscado e na verdade foi um zé mané 
- * que fez aquela imundice.
- * Mas enfim, se ele tivesse a funcionalidade que eu queria, que por sinal é algo trivial, eu não teria tido 
- * trabalho de criar um.
- * O diferencial é simples, essa implementação é humanamente mais compreensível que a outra e permite também 
- * que o menu seja colocado dentro de outro elemento, não necessariamente o body (qualquer elemento div), e 
- * o mais importante, o menu ocupará o espaço que for designado para ele, pois ele não possui posição 
- * absoluta e sim relativa. 
+ * Código 100% OO e permite também que o menu seja colocado dentro de outro elemento, 
+ * não necessariamente o body (qualquer elemento div), e o mais importante, o menu ocupará o espaço que 
+ * for designado para ele, pois ele não possui posição absoluta e sim relativa. 
  * Basta especificar o elemento onde ele deverá ser construido e ele estará lá.
- * Agora é possível alinhar o menu onde o programador achar melhor, lembrando que o alinhamento do coolmenus.js
- * Era relativo a posição da tela do navegador que não era necessariamente o meio da tela.
+ * É possível alinhar o menu onde o programador achar melhor.
  *  
  * @author Sergio www.wicstech.com.br
  */
