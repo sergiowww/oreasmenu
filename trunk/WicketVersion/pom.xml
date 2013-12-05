@@ -60,6 +60,11 @@
 	</profiles>
 	<scm>
 		<developerConnection>Sergio Eduardo D Oliveira</developerConnection>
-		<url>http://www.linkedin.com/in/sergioeduardo</url>
+		<connection>http://www.linkedin.com/in/sergioeduardo</connection>
+		<url>https://oreasmenu.googlecode.com/svn/trunk/</url>
 	</scm>
+	<organization>
+		<url>wicstech.net</url>
+		<name>WicsTech</name>
+	</organization>
 </project>

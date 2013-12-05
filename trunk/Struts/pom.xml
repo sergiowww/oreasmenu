@@ -88,4 +88,13 @@
 			</build>
 		</profile>
 	</profiles>
+	<scm>
+		<url>https://oreasmenu.googlecode.com/svn/trunk/</url>
+		<connection>http://www.linkedin.com/in/sergioeduardo</connection>
+		<developerConnection>Sergio Eduardo D Oliveira</developerConnection>
+	</scm>
+	<organization>
+		<name>WicsTech</name>
+		<url>wicstech.net</url>
+	</organization>
 </project>
