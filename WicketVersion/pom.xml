@@ -48,13 +48,34 @@
 			<build>
 				<resources>
 					<resource>
-						 <directory>../</directory>
-						 <includes>
-						 	<include>oreasmenu.js</include>
-						 </includes>
-						 <targetPath>br/com/wicstech/menuoreas/js</targetPath>
+						<directory>../</directory>
+						<includes>
+							<include>oreasmenu.js</include>
+						</includes>
+						<targetPath>br/com/wicstech/menuoreas/js</targetPath>
 					</resource>
 				</resources>
+				<plugins>
+					<plugin>
+						<groupId>net.alchim31.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin</artifactId>
+						<version>1.3.3</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compress</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<nosuffix>true</nosuffix>
+									<includes>
+										<include>oreasmenu.js</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 	</profiles>
