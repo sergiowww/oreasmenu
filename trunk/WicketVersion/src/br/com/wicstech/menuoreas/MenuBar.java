@@ -149,8 +149,6 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		javascript.append(',');
 		javascript.append(getStringParam(getUrlDestino(menuItem)));
 		javascript.append(',');
-		javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuName)));
-		javascript.append(',');
 		javascript.append(getStringParam(menuItem.getTarget() == null ? null : menuItem.getTarget().getTargetHTMLString()));
 		javascript.append(',');
 		javascript.append("" + menuItem.getOnclick());

@@ -1,12 +1,7 @@
 /**
- * Gerador de menus, mais um produto das organizações Orelhas!!!
- * Código 100% OO e permite também que o menu seja colocado dentro de outro elemento, 
- * não necessariamente o body (qualquer elemento div), e o mais importante, o menu ocupará o espaço que 
- * for designado para ele, pois ele não possui posição absoluta e sim relativa. 
- * Basta especificar o elemento onde ele deverá ser construido e ele estará lá.
- * É possível alinhar o menu onde o programador achar melhor.
+ * Gerador de menus javascript.
  *  
- * @author Sergio www.wicstech.com.br
+ * @author Sergio wicstech.net
  */
 
 /**
@@ -88,14 +83,6 @@ MenuItem.prototype = {
 	elementoInicial: null,
 	
 	/**
-	 * Nome do menu: inútil mas existe no menu-config.xml
-	 * Para dar um pouco mais de utilidade esse atributo não vai ser
-	 * obrigatório mas terá de ser único, se não for passado será gerado
-	 * @type String
-	 */
-	id: null,
-	
-	/**
 	 * div que representa o ítem de menu
 	 * @type HTMLDivElement
 	 */
@@ -170,24 +157,19 @@ MenuItem.prototype = {
 	 * @param {Function} onMouseOut			Função a ser chamada quando o mouse estiver fora do menu
 	 * @param {String} align				Alinhamento do menu, que pode ser definido também no CSS
 	 */
-	initialize: function(titulo, imagem, width, height, pagina, id, target, onClick, onMouseOver, onMouseOut, align){
-		//se o identificador for nulo cria um id para ele
-		if(id == null){
-			var identifier = Math.random();
-			id = "menuItem"+identifier;
-			id = id.replace(".", "");
-		}
+	initialize: function(titulo, imagem, width, height, pagina, target, onClick, onMouseOver, onMouseOut, align){
+	
 		this.titulo = titulo;
 		this.imagem = imagem;
 		this.width = width;
 		this.height = height;
 		this.pagina = pagina;
-		this.id = id;
 		this.onClick = onClick;
 		this.onMouseOver = onMouseOver;
 		this.onMouseOut = onMouseOut;
 		this.target = target;
 		this.align = align;
+		this.childMenuItem = null;
 	},
 	
 	/**
@@ -205,6 +187,7 @@ MenuItem.prototype = {
 			//o filho sou eu
 			this.parentMenuItem.childMenuItem.push(this);
 		}
+		return this;
 	},
 	
 	/**
@@ -402,10 +385,15 @@ MenuItem.prototype = {
 	buildChildArea: function(){
 		if(this.childArea == null){
 			var indiceNivelVisual = this.getNivel().indiceNivelVisual;
-			var div = new Element("div", {style: "position: absolute; z-index:"+indiceNivelVisual+";", className: this.menuGroup + "-cmItemBorder"});
-			div.hide();
+			var div = new Element("div", {className: this.menuGroup + "-cmItemBorder"+ this.getNivel().indiceNivel});
 			this.childArea = div;
-			document.body.appendChild(div);
+			if (this.getNivel().expandirSubNiveis) {
+				this.divMenuItem.appendChild(div);
+			} else { 
+				div.hide();
+				div.setStyle({position: "absolute", zIndex: indiceNivelVisual});
+				document.body.appendChild(div);
+			}
 		}
 	},
 	
@@ -417,16 +405,6 @@ MenuItem.prototype = {
 	addChildDiv: function(div){
 		this.buildChildArea();
 		this.childArea.appendChild(div);
-	},
-	
-	/**
-	 * Retorna o menuitem construido
-	 * @returns menu item construido
-	 * @type HTMLDivElement
-	 */
-	getDivMenuItem: function(){
-		this.buildItem();
-		return this.divMenuItem;
 	},
 	
 	/**
@@ -447,15 +425,19 @@ MenuItem.prototype = {
 			var xCoord = null;
 			var yCoord = null;
 			//se for o primeiro nível
-			if(this.elementoInicial != null && this.isHorizontal()){
+			if(this.elementoInicial != null || this.isHorizontal()){
 				xCoord = divMenuIr.cumulativeOffset().left;
-				yCoord = divMenuIr.cumulativeOffset().top+divMenuIr.getHeight()-7;
+				yCoord = divMenuIr.cumulativeOffset().top+divMenuIr.getHeight();
 			}else{
-				xCoord = divMenuIr.cumulativeOffset().left + divMenuIr.getWidth()-7;
+				xCoord = divMenuIr.cumulativeOffset().left + divMenuIr.getWidth();
 				yCoord = divMenuIr.cumulativeOffset().top;
 			}
+			if (this.nivel.alinharCoordenadaXMenuPai) {
+				this.childArea.setStyle({
+					left: xCoord+"px"
+				});
+			}
 			this.childArea.setStyle({
-				left: xCoord+"px",
 				top: yCoord+"px"
 			});
 		}
@@ -476,8 +458,10 @@ MenuItem.prototype = {
 	 */
 	mouseOver: function(){
 		var nivel=this.getNivel();
-		this.divMenuItem.addClassName(nivel.estiloHover);
-		this.divMenuItem.removeClassName(nivel.estilo);
+		if (nivel.estiloHover != nivel.estilo) {
+			this.divMenuItem.addClassName(nivel.estiloHover);
+			this.divMenuItem.removeClassName(nivel.estilo);
+		} 
 		if(this.hasChildNodes()){
 			this.showDivArea();
 		}
@@ -490,9 +474,11 @@ MenuItem.prototype = {
 	 */
 	mouseOut: function(){
 		var nivel = this.getNivel();
-		this.divMenuItem.addClassName(nivel.estilo);
-		this.divMenuItem.removeClassName(nivel.estiloHover);
-		if(this.hasChildNodes()){
+		if (nivel.estiloHover != nivel.estilo) {
+			this.divMenuItem.addClassName(nivel.estilo);
+			this.divMenuItem.removeClassName(nivel.estiloHover);
+		}
+		if(this.hasChildNodes() && !nivel.expandirSubNiveis){
 			this.hideDivArea();
 		}
 	},
@@ -576,20 +562,26 @@ MenuItem.prototype = {
  * @class Nivel
  */
 var Nivel = Class.create();
+Nivel.TAMANHO_EM_PX = false;
+Nivel.TAMANHO_EM_PC = true;
+Nivel.ORIENTACAO_HORIZONTAL = true;
+Nivel.ORIENTACAO_VERTICAL = false;
+Nivel.NAO_EXPANDIR_SUBNIVEL = false;
+Nivel.EXPANDIR_SUBNIVEL = true;
 Nivel.prototype = {
-		
+	
 	/**
 	 * Indicar se é o nível inicial
 	 * @type Boolean
 	 */
-	nivelInicial: false,
+	nivelInicial: true,
 	
 	/**
 	 * Indica se o tamanho dos botões é em porcentagem ou em pixels.
 	 * se <code>false</code> é em pixels, se <code>true</code> é em %.
 	 * @type Boolean
 	 */
-	tamanhoRelativo: false,
+	tamanhoRelativo: Nivel.TAMANHO_EM_PX,
 	
 	/**
 	 * Indicar o tipo de orientação desse nível do menu, se é horizontal ou vertical
@@ -603,7 +595,7 @@ Nivel.prototype = {
 	 * Estilo de todos os ítens de menu desse nível
 	 * @type String
 	 */
-	estilo:null,
+	estilo: null,
 	
 	/**
 	 * Estilo de todos os ítens de menu desse nível quando são focados (mouseover)
@@ -616,7 +608,7 @@ Nivel.prototype = {
 	 * caminho da imagem
 	 * @type String
 	 */
-	imagemSeta:null,
+	imagemSeta: null,
 	
 	/**
 	 * MenuItem selecionado no nível atual
@@ -637,10 +629,31 @@ Nivel.prototype = {
 	heightDefault: null,
 	
 	/**
-	 * Indice desse nível
+	 * Indice do nível sendo o maior nível o primeiro nível
 	 * @type Number
 	 */
 	indiceNivelVisual: null,
+	
+	
+	/**
+	 * Índice do nível sendo o zero o primeiro nível.
+	 */
+	indiceNivel: null,
+	
+	
+	/**
+	 * Indica se este nível deve ser alinhado com o menu que o abriu.
+	 * Caso contrário, ele alinha com o início da página.
+	 * @type Boolean
+	 */
+	alinharCoordenadaXMenuPai: true,
+	
+	/**
+	 * Indica se o próximo subnível deste nível deve ser expandido automaticamente 
+	 * quando este for apresentado.
+	 * @type Boolean
+	 */
+	expandirSubNiveis: Nivel.NAO_EXPANDIR_SUBNIVEL,
 	
 	/**
 	 * @constructor
@@ -651,8 +664,10 @@ Nivel.prototype = {
 	 * @param {Number} width			largura dos ítens de menu desse nível
 	 * @param {Number} height			altura dos ítens de menu desse nível
 	 * @param {Number} tamanhoRelativo  indica se as dimensões dos itens de menu é em % ou em px.
+	 * @param {Boolean} alinharCoordenadaXMenuPai
+	 * @param {Boolean} expandirSubNiveis
 	 */
-	initialize: function(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo){
+	initialize: function(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo, alinharCoordenadaXMenuPai, expandirSubNiveis){
 		this.orientacao = orientacao;
 		this.estilo = estilo;
 		this.estiloHover = estiloHover;
@@ -660,6 +675,8 @@ Nivel.prototype = {
 		this.widthDefault = width;
 		this.heightDefault = height;
 		this.tamanhoRelativo = tamanhoRelativo;
+		this.alinharCoordenadaXMenuPai = alinharCoordenadaXMenuPai;
+		this.expandirSubNiveis = expandirSubNiveis;
 	},
 	
 	/**
@@ -793,11 +810,15 @@ FactoryMenu.prototype = {
 	
 	/**
 	 * Função de recursividade para construir todos os níveis do menu
-	 * @param {MenuItem} menuItem
+	 * @param {Array} menus
 	 * @param {Number} indiceNivel
 	 */
 	construirSub: function(menus, indiceNivel){
-		menus.each((function(menuItem){
+		for (var i = 0; i < menus.length; i++) {
+			/**
+			 * @type MenuItem
+			 */
+			var menuItem = menus[i];
 			menuItem.setMenuGroup(this.menuGroup);
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
@@ -806,6 +827,7 @@ FactoryMenu.prototype = {
 				menuItem.insertPosition = this.insertion;
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
+			nivel.indiceNivel = indiceNivel;
 			menuItem.setNivel(nivel);
 			
 			menuItem.buildItem();
@@ -820,8 +842,8 @@ FactoryMenu.prototype = {
 			}
 			if(menuItem.hasChildNodes()){
 				this.construirSub(menuItem.childMenuItem, indiceNivel+1);
-			}
-		}).bind(this));
+			}			
+		}
 	},
 	
 	/**
