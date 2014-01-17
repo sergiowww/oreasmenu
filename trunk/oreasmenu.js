@@ -427,9 +427,9 @@ MenuItem.prototype = {
 			//se for o primeiro nível
 			if(this.elementoInicial != null || this.isHorizontal()){
 				xCoord = divMenuIr.cumulativeOffset().left;
-				yCoord = divMenuIr.cumulativeOffset().top+divMenuIr.getHeight();
+				yCoord = divMenuIr.cumulativeOffset().top+divMenuIr.getHeight() + this.getNivel().ajusteDistanciaMenu;
 			}else{
-				xCoord = divMenuIr.cumulativeOffset().left + divMenuIr.getWidth();
+				xCoord = divMenuIr.cumulativeOffset().left + divMenuIr.getWidth() + this.getNivel().ajusteDistanciaMenu;
 				yCoord = divMenuIr.cumulativeOffset().top;
 			}
 			if (this.nivel.alinharCoordenadaXMenuPai) {
@@ -656,6 +656,12 @@ Nivel.prototype = {
 	expandirSubNiveis: Nivel.NAO_EXPANDIR_SUBNIVEL,
 	
 	/**
+	 * Ajuste de distância do sub-menu para o menu pai respectivo.
+	 * @type Number
+	 */
+	ajusteDistanciaMenu: -7,
+	
+	/**
 	 * @constructor
 	 * @param {Boolean} orientacao		orientação do do menu se é horizontal ou vertical
 	 * @param {String} estilo			estilo que o menu deve possuir no seu estado normal
@@ -677,6 +683,7 @@ Nivel.prototype = {
 		this.tamanhoRelativo = tamanhoRelativo;
 		this.alinharCoordenadaXMenuPai = alinharCoordenadaXMenuPai;
 		this.expandirSubNiveis = expandirSubNiveis;
+		this.ajusteDistanciaMenu = -7;
 	},
 	
 	/**
@@ -686,6 +693,15 @@ Nivel.prototype = {
 	 */
 	isHorizontal: function(){
 		return this.orientacao;
+	},
+	
+	/**
+	 * Set ajusteDistanciaMenu 
+	 * @param ajusteDistanciaMenu
+	 */
+	setAjusteDistanciaMenu: function(ajusteDistanciaMenu){
+		this.ajusteDistanciaMenu = ajusteDistanciaMenu;
+		return this;
 	}
 };
 
