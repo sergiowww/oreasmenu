@@ -1,0 +1,76 @@
+@import url(global.css);
+
+/* CoolMenus 4 - default styles - do not edit */
+.clCMEvent{position:absolute; width:99%; height:99%; 
+           clip:rect(0,100%,100%,0); left:0; top:0;}
+.clCMAbs{position:absolute; visibility:hidden; left:0; top:0}
+/* CoolMenus 4 - default styles - end */
+.clBar {
+    position: absolute; 
+    height: 40px; 
+    background-color: #F0F0FF;
+    color: black;
+    margin-right: auto;
+    margin-left: auto;
+    visibility: hidden;
+    border-bottom: 1px solid gray;
+}
+.menuBar-cmMenuBorder img{
+	vertical-align: middle;
+}
+
+.cmMenu, .cmItem {
+
+    font-family: Arial, Helvetica, San-serif;
+    color: white; 
+    padding: 2px; 
+    font-weight: bold;
+}
+
+.cmMenu, .cmMenuOver {
+    text-align: center;
+    font-size: 12px;
+}
+
+.cmMenuOver, .cmItemOver {  
+    font-family: Arial, Helvetica, San-serif;
+
+    border: 1px outset #FE7728;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+    padding: 3px; 
+    cursor: pointer; 
+    cursor: hand; /* IE 5.5 non-compliant workaround */ 
+}
+
+.menuBar-cmMenuBorder, .menuBar-cmItemBorder {
+
+    background: url(fundo_botao_menu.jpg);
+}
+.menuBar-cmMenuBorder{
+	border-left: 1px outset #A0A0A0;
+}
+.cmItem, .cmItemOver {
+    color: #FE7728;
+    background: #FADA5A url("fundo_botao_itens.png");
+    text-align: left;
+}
+
+.cmItemOver {
+    border: 1px inset white; 
+}
+ 
+.cmItem, .cmItemOver {
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.menuBar-cmItemBorder {
+    background: #FE7728;
+}
+
+.menuArrows {
+    vertical-align: middle;
+    margin-left: 0px;
+}

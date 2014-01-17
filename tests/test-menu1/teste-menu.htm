@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+	<title>Teste menu</title>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="teste-menu-arquivos/coolmenu.css" />
+	
+	<script type="text/javascript" src="../../WicketVersion/resources/br/com/wicstech/menuoreas/libraries/prototype.js"></script>
+	<script type="text/javascript" src="../../oreasmenu.js"></script>
+	<script type="text/javascript">
+		if (typeof MenuBar == "undefined") {
+			MenuBar = new Object();
+		}
+		MenuBar.menuBar6 = function() {
+			var menus = new Array();
+			var menu0 = new MenuItem("Respons\u00E1veis", "teste-menu-arquivos/responsaveis.png", null, null, null, "menu0", null, null, null, null, null);
+			menus.push(menu0);
+			var menu1 = new MenuItem("Cadastrar", "teste-menu-arquivos/novo_registro.png", null, null, "responsavel", "menu1", null, null, null, null, null);
+			menu1.setParentMenuItem(menu0);
+			var menu2 = new MenuItem("Listar", "teste-menu-arquivos/procurar.png", null, null, "listarresponsavel", "menu2", null, null, null, null, null);
+			menu2.setParentMenuItem(menu0);
+			var menu3 = new MenuItem("Estudante", "teste-menu-arquivos/contact-new.png", null, null, null, "menu3", null, null, null, null, null);
+			menus.push(menu3);
+			var menu4 = new MenuItem("Cadastrar", "teste-menu-arquivos/novo_registro.png", null, null, "interessado", "menu4", null, null, null, null, null);
+			menu4.setParentMenuItem(menu3);
+			var menu5 = new MenuItem("Listar", "teste-menu-arquivos/procurar.png", null, null, "listarinteressados", "menu5", null, null, null, null, null);
+			menu5.setParentMenuItem(menu3);
+			var menu6 = new MenuItem("Contratos", "teste-menu-arquivos/imprimir.png", null, null, "listarcontratos", "menu6", null, null, null, null, null);
+			menu6.setParentMenuItem(menu3);
+			var menu7 = new MenuItem("Modelo do Contrato", "teste-menu-arquivos/modelocontrato.png", null, null, "modeloContratoInteressado", "menu7", null, null, null, null, null);
+			menu7.setParentMenuItem(menu3);
+			var menu8 = new MenuItem("Profissional", "teste-menu-arquivos/worker.png", null, null, null, "menu8", null, null, null, null, null);
+			menus.push(menu8);
+			var menu9 = new MenuItem("Cadastrar", "teste-menu-arquivos/novo_registro.png", null, null, "profissional", "menu9", null, null, null, null, null);
+			menu9.setParentMenuItem(menu8);
+			var menu10 = new MenuItem("Listar", "teste-menu-arquivos/procurar.png", null, null, "listarprofissionais", "menu10", null, null, null, null, null);
+			menu10.setParentMenuItem(menu8);
+			var menu11 = new MenuItem("Modelo do Contrato", "teste-menu-arquivos/modelocontrato.png", null, null, "modeloContratoProfissional", "menu11", null, null, null, null, null);
+			menu11.setParentMenuItem(menu8);
+			var menu12 = new MenuItem("Grade hor\u00E1ria", "teste-menu-arquivos/calendar.png", null, null, null, "menu12", null, null, null, null, null);
+			menus.push(menu12);
+			var menu13 = new MenuItem("Visualizar", "teste-menu-arquivos/visualizargrade.png", null, null, "grade", "menu13", null, null, null, null, null);
+			menu13.setParentMenuItem(menu12);
+			var menu14 = new MenuItem("Montar grade", "teste-menu-arquivos/montargrade.png", null, null, "montarGrade", "menu14", null, null, null, null, null);
+			menu14.hint = "Incluir\/Remover agendamentos em bloco";
+			menu14.setParentMenuItem(menu12);
+			var menu15 = new MenuItem("Tabelas", "teste-menu-arquivos/tables.png", null, null, null, "menu15", null, null, null, null, null);
+			menus.push(menu15);
+			var menu16 = new MenuItem("Tipos de atendimento", "teste-menu-arquivos/tiposatendimento.png", null, null, "tipoatendimento", "menu16", null, null, null, null, null);
+			menu16.setParentMenuItem(menu15);
+			var menu17 = new MenuItem("Regi\u00F5es de atua\u00E7\u00E3o", "teste-menu-arquivos/map.png", null, null, "regiao", "menu17", null, null, null, null, null);
+			menu17.setParentMenuItem(menu15);
+			var menu18 = new MenuItem("Cursos atendidos", "teste-menu-arquivos/graduation-hat.png", null, null, "cursos", "menu18", null, null, null, null, null);
+			menu18.hint = "1\u00AA s\u00E9rie do Ensino Fundamental,  2\u00BA ano do Ensino M\u00E9dio e etc. ";
+			menu18.setParentMenuItem(menu15);
+			var menu19 = new MenuItem("Institui\u00E7\u00F5es de ensino", "teste-menu-arquivos/escolas.png", null, null, "instituicoes", "menu19", null, null, null, null, null);
+			menu19.setParentMenuItem(menu15);
+			var menu20 = new MenuItem("Disciplinas", "teste-menu-arquivos/books.png", null, null, "disciplinas", "menu20", null, null, null, null, null);
+			menu20.hint = "Portugu\u00EAs, matem\u00E1tica, ingl\u00EAs ou etc.";
+			menu20.setParentMenuItem(menu15);
+			var menu21 = new MenuItem("Caracter\u00EDsticas", "teste-menu-arquivos/caracteristicas.gif", null, null, "caracteristicas", "menu21", null, null, null, null, null);
+			menu21.setParentMenuItem(menu15);
+			var menu22 = new MenuItem("N\u00EDveis de caracter\u00EDsticas", "teste-menu-arquivos/niveis.png", null, null, "niveis", "menu22", null, null, null, null, null);
+			menu22.setParentMenuItem(menu15);
+			var menu23 = new MenuItem("Locais de atendimento", "teste-menu-arquivos/locais.png", null, null, "locais", "menu23", null, null, null, null, null);
+			menu23.setParentMenuItem(menu15);
+			var menu24 = new MenuItem("Relat\u00F3rios", "teste-menu-arquivos/relatorios.png", null, null, null, "menu24", null, null, null, null, null);
+			menus.push(menu24);
+			var menu25 = new MenuItem("Grade hor\u00E1ria agrupada", "teste-menu-arquivos/books.png", 190, null, "relatorioeventos", "menu25", null, null, null, null, null);
+			menu25.setParentMenuItem(menu24);
+			var menu26 = new MenuItem("Pagamento do profissional", "teste-menu-arquivos/pagamentos.png", 190, null, "relatoriopagamentos", "menu26", null, null, null, null, null);
+			menu26.setParentMenuItem(menu24);
+			var menu27 = new MenuItem("Acesso", "teste-menu-arquivos/acessos.png", null, null, null, "menu27", null, null, null, null, null);
+			menus.push(menu27);
+			var menu28 = new MenuItem("Usu\u00E1rios", "teste-menu-arquivos/usuarios.png", null, null, null, "menu28", null, null, null, null, null);
+			menu28.setParentMenuItem(menu27);
+			var menu29 = new MenuItem("Cadastrar", "teste-menu-arquivos/novo_registro.png", null, null, "usuario", "menu29", null, null, null, null, null);
+			menu29.setParentMenuItem(menu28);
+			var menu30 = new MenuItem("Listar", "teste-menu-arquivos/procurar.png", null, null, "listarusuarios", "menu30", null, null, null, null, null);
+			menu30.setParentMenuItem(menu28);
+			var menu31 = new MenuItem("Perfis de acesso", "teste-menu-arquivos/perfis.png", null, null, "perfis", "menu31", null, null, null, null, null);
+			menu31.setParentMenuItem(menu27);
+			var menu32 = new MenuItem("Alterar senha", "teste-menu-arquivos/key1.png", null, null, "trocarSenha", "menu32", null, null, null, null, null);
+			menu32.hint = "Trocar a senha de acesso do usu\u00E1rio atual";
+			menu32.setParentMenuItem(menu27);
+			var menu33 = new MenuItem("Sair", "teste-menu-arquivos/sair.png", null, null, "logout", "menu33", null, null, null, null, null);
+			menus.push(menu33);
+			var factorymenuBar = new FactoryMenu(menus, "menuBar", "menuBar6", "top");
+			factorymenuBar.addNivel(new Nivel(true, "cmMenu", "cmMenuOver", null, 125, 22, false, true));
+			factorymenuBar.addNivel(new Nivel(false, "cmItem", "cmItemOver", "teste-menu-arquivos/Darrow.gif", 175, 22, false, true));
+			factorymenuBar.construirMenu();
+		}
+	</script>
+</head>
+<body>
+	<div id="menuBar6">
+
+		<script type="text/javascript">
+			MenuBar.menuBar6();
+		</script>
+
+	</div>
+</body>
+</html>

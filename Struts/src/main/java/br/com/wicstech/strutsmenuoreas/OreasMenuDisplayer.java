@@ -138,8 +138,6 @@ public class OreasMenuDisplayer extends MessageResourcesMenuDisplayer {
 			sb.append(',');
 			sb.append(getStringParam(menu.getUrl()));
 			sb.append(',');
-			sb.append(getStringParam(menuName));
-			sb.append(',');
 			sb.append(getStringParam(menu.getTarget()));
 			sb.append(',');
 			sb.append("" + menu.getOnclick());
