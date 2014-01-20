@@ -31,6 +31,11 @@ public class Nivel implements Serializable {
 	private boolean expandirSubNiveis;
 
 	/**
+	 * Alinhar a coordenada x do submenu ao menu pai.
+	 */
+	private boolean alinharCoordenadaXMenuPai = true;
+
+	/**
 	 * Imagem da seta.
 	 */
 	private ResourceReference imagemSeta;
@@ -53,7 +58,12 @@ public class Nivel implements Serializable {
 	/**
 	 * Altura padrão do item de menu.
 	 */
-	heightDefault;
+	heightDefault,
+
+	/**
+	 * Ajuste de distância do submenu para o menu.
+	 */
+	ajusteDistanciaMenu;
 
 	public Nivel(Orientacao orientacao, String styleClass, String styleClassHover, ResourceReference imagemSeta, Integer widthDefault, Integer heightDefault) {
 		super();
@@ -176,5 +186,35 @@ public class Nivel implements Serializable {
 
 	public void setExpandirSubNiveis(boolean expandirSubNiveis) {
 		this.expandirSubNiveis = expandirSubNiveis;
+	}
+
+	/**
+	 * @return the alinharCoordenadaXMenuPai
+	 */
+	public boolean isAlinharCoordenadaXMenuPai() {
+		return alinharCoordenadaXMenuPai;
+	}
+
+	/**
+	 * @param alinharCoordenadaXMenuPai
+	 *            the alinharCoordenadaXMenuPai to set
+	 */
+	public void setAlinharCoordenadaXMenuPai(boolean alinharCoordenadaXMenuPai) {
+		this.alinharCoordenadaXMenuPai = alinharCoordenadaXMenuPai;
+	}
+
+	/**
+	 * @return the ajusteDistanciaMenu
+	 */
+	public Integer getAjusteDistanciaMenu() {
+		return ajusteDistanciaMenu;
+	}
+
+	/**
+	 * @param ajusteDistanciaMenu
+	 *            the ajusteDistanciaMenu to set
+	 */
+	public void setAjusteDistanciaMenu(Integer ajusteDistanciaMenu) {
+		this.ajusteDistanciaMenu = ajusteDistanciaMenu;
 	}
 }

@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.string.JavascriptUtils;
+import org.wicketstuff.jslibraries.JSReference;
 
 /**
  * Barra de menu.
@@ -25,8 +26,11 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private static final long serialVersionUID = -8683400812756686255L;
 
-	private static final ResourceReference JS_PROTOTYPE = new ResourceReference(MenuBar.class, "libraries/prototype.js"), //
-			JS_OREASMENU = new ResourceReference(MenuBar.class, "js/oreasmenu.js");
+	private static final ResourceReference JS_OREAS_PROTOTYPE = new ResourceReference(MenuBar.class, "js/oreasmenu-prototype.js");
+	private static final ResourceReference JS_OREAS_JQUERY = new ResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
+	private static final ResourceReference JS_COMMONS = new ResourceReference(MenuBar.class, "js/commons.js");
+
+	private JSLibrary jsLibrary = JSLibrary.PROTOTYPE_JS;
 
 	private String idContainer, //
 			menuGroup, //
@@ -58,8 +62,14 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavascriptReference(JS_PROTOTYPE, "prototype");
-		response.renderJavascriptReference(JS_OREASMENU, "oreasmenu");
+		response.renderJavascriptReference(JSReference.getReference(jsLibrary.getDescriptor()), "prototype");
+		response.renderJavascriptReference(JS_COMMONS);
+		if (JSLibrary.JQUERY.equals(jsLibrary)) {
+			response.renderJavascriptReference(JS_OREAS_JQUERY);
+		}
+		if (JSLibrary.PROTOTYPE_JS.equals(jsLibrary)) {
+			response.renderJavascriptReference(JS_OREAS_PROTOTYPE);
+		}
 		renderMenu(response);
 	}
 
@@ -122,8 +132,16 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(',');
 			javascript.append(nivel.isTamanhoRelativo());
 			javascript.append(',');
+			javascript.append(nivel.isAlinharCoordenadaXMenuPai());
+			javascript.append(',');
 			javascript.append(nivel.isExpandirSubNiveis());
-			javascript.append("));\r\n");
+			javascript.append(")");
+			if (nivel.getAjusteDistanciaMenu() != null) {
+				javascript.append(".setAjusteDistanciaMenu(");
+				javascript.append(nivel.getAjusteDistanciaMenu());
+				javascript.append(")");
+			}
+			javascript.append(");\r\n");
 		}
 		javascript.append(varFactoryMenu + ".construirMenu()");
 	}
