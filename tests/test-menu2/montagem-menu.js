@@ -66,9 +66,9 @@ MenuBar.menuBar6 = function() {
 	menus.push(menu2);
 	menus.push(menu3);
 	var factorymenuBar = new FactoryMenu(menus, "menuPrincipal", "menuPrincipal", "top");
-	factorymenuBar.addNivel(new Nivel(Nivel.ORIENTACAO_HORIZONTAL, "menuNivel1", "menuNivel1-Hover", null, 120, 22, Nivel.TAMANHO_EM_PX, false, Nivel.NAO_EXPANDIR_SUBNIVEL).setAjusteDistanciaMenu(-5));
-	factorymenuBar.addNivel(new Nivel(Nivel.ORIENTACAO_HORIZONTAL, "menuNivel2", "menuNivel2-Hover", null, null, null, Nivel.TAMANHO_EM_PX, false, Nivel.NAO_EXPANDIR_SUBNIVEL).setAjusteDistanciaMenu(0));
-	factorymenuBar.addNivel(new Nivel(Nivel.ORIENTACAO_HORIZONTAL, "menuNivel3", "menuNivel3", null, null, null, Nivel.TAMANHO_EM_PX, true, Nivel.EXPANDIR_SUBNIVEL));
-	factorymenuBar.addNivel(new Nivel(Nivel.ORIENTACAO_VERTICAL, "menuNivel4", "menuNivel4", null, null, null, Nivel.TAMANHO_EM_PX, true, Nivel.NAO_EXPANDIR_SUBNIVEL));
+	factorymenuBar.addNivel(new Nivel(Constantes.ORIENTACAO_HORIZONTAL, "menuNivel1", "menuNivel1-Hover", null, 120, 22, Constantes.TAMANHO_EM_PX, false, Constantes.NAO_EXPANDIR_SUBNIVEL).setAjusteDistanciaMenu(-5));
+	factorymenuBar.addNivel(new Nivel(Constantes.ORIENTACAO_HORIZONTAL, "menuNivel2", "menuNivel2-Hover", null, null, null, Constantes.TAMANHO_EM_PX, false, Constantes.NAO_EXPANDIR_SUBNIVEL).setAjusteDistanciaMenu(0));
+	factorymenuBar.addNivel(new Nivel(Constantes.ORIENTACAO_HORIZONTAL, "menuNivel3", "menuNivel3", null, null, null, Constantes.TAMANHO_EM_PX, true, Constantes.EXPANDIR_SUBNIVEL));
+	factorymenuBar.addNivel(new Nivel(Constantes.ORIENTACAO_VERTICAL, "menuNivel4", "menuNivel4", null, null, null, Constantes.TAMANHO_EM_PX, true, Constantes.NAO_EXPANDIR_SUBNIVEL));
 	factorymenuBar.construirMenu();
 };

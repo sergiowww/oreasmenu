@@ -5,6 +5,45 @@
  */
 
 /**
+ * Creates a PeriodicalExecuter.
+ * @class PeriodicalExecuter
+ * 
+ * @constructor
+ * 
+ * @param {Function} callback  the function to be executed at each interval
+ * @param {Number} frequency the amount of time, in seconds, to wait in between callbacks
+ */
+function PeriodicalExecuter(callback, frequency){
+	this.callback = callback;
+	this.frequency = frequency;
+	this.currentlyExecuting = false;
+
+	this.execute = function() {
+		this.callback(this);
+	};
+
+	this.stop = function() {
+		if (!this.timer) return;
+		clearInterval(this.timer);
+		this.timer = null;
+	};
+
+	this.onTimerEvent = function() {
+		if (!this.currentlyExecuting) {
+			try {
+				this.currentlyExecuting = true;
+				this.execute();
+				this.currentlyExecuting = false;
+			} catch(e) {
+				this.currentlyExecuting = false;
+				throw e;
+			}
+		}
+	};
+	this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
+};
+
+/**
  * Itens de menu
  * Cada ítem de menu é uma instância dessa classe
  * @class MenuItem
@@ -117,7 +156,7 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * 
 	 * @type String
 	 */
-	this.insertPosition = null;
+	this.insertPosition = "top";
 	
 	/**
 	 * Destino onde a página deverá ser carregada
@@ -201,20 +240,21 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	this.buildItem = function(){
 		if(this.divMenuItem == null){
 			var nivel = this.getNivel();
-			var div = new Element("div", {style: "margin: 0px;"});
+			var div = $("<div></div>").css("margin", "0");
 			var width=this.getWidth();
 			var height=this.getHeight();
-			div.setStyle({
+			div.css({
 				width: this.nivel.tamanhoRelativo ? "100%" : width+this.getUnidadeMedida(),
 				height: this.nivel.tamanhoRelativo ? "100%" : height+this.getUnidadeMedida()
 			});
+			
 			if(this.toolTip != null){
 				div.title = this.toolTip;
 			}
 			var possuiImagem = this.imagem != null;
 			if(possuiImagem){
 				var estilo = "margin-right: 5px; float:left; ";
-				div.appendChild(new Element("div", {style: estilo}).update(this.getImageLink()));
+				div.append($("<div></div>").attr("style", estilo).append(this.getImageLink()));
 			}
 			var adicionarSeta = nivel.imagemSeta != null && this.hasChildNodes();
 			
@@ -224,26 +264,24 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 			var divLinkTitulo = this.getDivLinkTitulo();
 			
 			if(adicionarSeta){
-				var estiloLink = new Hash();
-				estiloLink.set("float", "left");
+				divLinkTitulo.css("float", "left");
 				if(possuiImagem) {
-					estiloLink.set("width", "70%");
+					divLinkTitulo.css("width", "70%");
 				}
-				divLinkTitulo.setStyle(estiloLink.toObject());
-				div.appendChild(divLinkTitulo);
+				div.append(divLinkTitulo);
 			}else{
-				div.appendChild(divLinkTitulo);
+				div.append(divLinkTitulo);
 			}
 			if(adicionarSeta){
-				div.appendChild(new Element("div", {style: "margin-left:auto; width: 4px; width: 10%;"}).update(
-					new Element("img", {src: nivel.imagemSeta, style :"vertical-align:middle; margin-top:5px; margin-bottom:5px;"})
+				div.append($("<div></div>").attr({style: "margin-left:auto; width: 4px; width: 10%;"}).append(
+					$("<img />").attr({src: nivel.imagemSeta, style :"vertical-align:middle; margin-top:5px; margin-bottom:5px;"})
 				));
 			}
-			div.addClassName(nivel.estilo);
+			div.addClass(nivel.estilo);
 			this.divMenuItem = div;
 			this.adicionarEventosCustom();
 			if(this.align != null){
-				div.setStyle({textAlign: this.align});
+				div.css("textAlign", this.align);
 			}
 			var novaDiv = null;
 			var estiloDiv = "";
@@ -251,30 +289,46 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 				estiloDiv = "float: left;";
 			}
 			if(this.elementoInicial != null){
-				novaDiv = new Element("div", {className: this.menuGroup + "-cmMenuBorder", style: estiloDiv}).update(div);
-				var ins = new Object();
-				ins[this.insertPosition] = novaDiv; 
-				this.elementoInicial.insert(ins);
+				novaDiv = $("<div></div>").attr("style", estiloDiv).addClass(this.menuGroup + "-cmMenuBorder").append(div);
+				this.insertNivelZeroMenu(novaDiv);
 			}else if(this.parentMenuItem != null){
-				div.setStyle({clear: "both"});
-				novaDiv = new Element("div", {style: "margin:1px;"+estiloDiv}).update(div);
-				
+				div.css("clear", "both");
+				novaDiv = $("<div></div>").attr("style", "margin:1px;"+estiloDiv).append(div);
 				this.parentMenuItem.addChildDiv(novaDiv);
 			}
 			
-			novaDiv.setStyle({
+			novaDiv.css({
 				clip: "rect(0px, "+(width+2)+this.getUnidadeMedida()+", "+(height+2)+this.getUnidadeMedida()+", 0px)",
 				width: width+this.getUnidadeMedida(),
 				height: height+this.getUnidadeMedida(),
 				overflow: "hidden",
 				zIndex: nivel.indiceNivelVisual
 			});
-			var cor = this.divMenuItem.getStyle("color");
-			novaDiv.select("a").each(function(a){
-				a.setStyle({
-					color: cor
-				});
-			});
+			var cor = this.divMenuItem.css("color");
+			novaDiv.find("a").css("color", cor);
+		}
+	};
+	
+	/**
+	 * Inserir o nível zero do menu de acordo com as posição solicitada
+	 * @param {HTMLDivElement} div
+	 */
+	this.insertNivelZeroMenu = function(div){
+		switch (this.insertPosition) {
+		case "top":
+			this.elementoInicial.prepend(div);
+			break;
+		case "above":
+			this.elementoInicial.after(div);
+			break;
+		case "below":
+			this.elementoInicial.before(div);
+			break;
+		case "bottom":
+			this.elementoInicial.append(div);
+			break;
+		default:
+			break;
 		}
 	};
 	
@@ -286,13 +340,13 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 */
 	this.adicionarEventosCustom = function(){
 		if(this.onClick != null){
-			Event.observe(this.divMenuItem, "click", this.onClick);
+			this.divMenuItem.click(this.onClick);
 		}
 		if(this.onMouseOut != null){
-			Event.observe(this.divMenuItem, "mouseout", this.onMouseOut);
+			this.divMenuItem.mouseout(this.onMouseOut);
 		}
 		if(this.onMouseOver != null){
-			Event.observe(this.divMenuItem, "mouseover", this.onMouseOver);
+			this.divMenuItem.mouseover(this.onMouseOver);
 		}
 	};
 	
@@ -302,11 +356,11 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * @type Element
 	 */
 	this.getImageLink = function(){
-		var img = new Element("img", {src: this.imagem, alt: this.titulo, style: "vertical-align: middle; border:none;"});
+		var img = $("<img />").attr({src: this.imagem, alt: this.titulo, style: "vertical-align: middle; border:none;"});
 		if(this.pagina == null){
 			return img;
 		}
-		return new Element("a", {href: this.pagina, target: this.getTarget()}).update(img);
+		return $("<a></a>").attr({href: this.pagina, target: this.getTarget()}).append(img);
 	};
 	
 	/**
@@ -335,15 +389,15 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		/**
 		 * @type HTMLDivElement
 		 */
-		var divRetorno = new Element("div");
+		var divRetorno = $("<div></div>");
 		if (this.hint != null) {
-			if (Object.isString(linkOuTexto)) {
+			if (typeof linkOuTexto == "string") {
 				divRetorno.title = this.hint;
 			}else{
 				linkOuTexto.title = this.hint;
 			}
 		}
-		return divRetorno.update(linkOuTexto);
+		return divRetorno.append(linkOuTexto);
 	};
 	
 	/**
@@ -360,7 +414,7 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		if(this.imagem != null) {
 			estiloLink = estiloLink.concat("width: 70%; float:left;");
 		}
-		return new Element("a", {href: this.pagina, style: estiloLink, target: this.getTarget()}).update(this.titulo);
+		return $("<a></a>").attr({href: this.pagina, style: estiloLink, target: this.getTarget()}).append(this.titulo);
 	};
 	
 	/**
@@ -369,14 +423,14 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	this.buildChildArea = function(){
 		if(this.childArea == null){
 			var indiceNivelVisual = this.getNivel().indiceNivelVisual;
-			var div = new Element("div", {className: this.menuGroup + "-cmItemBorder"+ this.getNivel().indiceNivel});
+			var div = $("<div></div>").addClass(this.menuGroup + "-cmItemBorder"+ this.getNivel().indiceNivel);
 			this.childArea = div;
 			if (this.getNivel().expandirSubNiveis) {
-				this.divMenuItem.appendChild(div);
+				this.divMenuItem.append(div);
 			} else { 
 				div.hide();
-				div.setStyle({position: "absolute", zIndex: indiceNivelVisual});
-				document.body.appendChild(div);
+				div.css({position: "absolute", zIndex: indiceNivelVisual});
+				$(document.body).append(div);
 			}
 		}
 	};
@@ -388,7 +442,7 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 */
 	this.addChildDiv = function(div){
 		this.buildChildArea();
-		this.childArea.appendChild(div);
+		this.childArea.append(div);
 	};
 	
 	/**
@@ -410,20 +464,16 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 			var yCoord = null;
 			//se for o primeiro nível
 			if(this.elementoInicial != null || this.isHorizontal()){
-				xCoord = divMenuIr.cumulativeOffset().left;
-				yCoord = divMenuIr.cumulativeOffset().top+divMenuIr.getHeight() + this.getNivel().ajusteDistanciaMenu;
+				xCoord = divMenuIr.offset().left;
+				yCoord = divMenuIr.offset().top+divMenuIr.height() + this.getNivel().ajusteDistanciaMenu;
 			}else{
-				xCoord = divMenuIr.cumulativeOffset().left + divMenuIr.getWidth() + this.getNivel().ajusteDistanciaMenu;
-				yCoord = divMenuIr.cumulativeOffset().top;
+				xCoord = divMenuIr.offset().left + divMenuIr.width() + this.getNivel().ajusteDistanciaMenu;
+				yCoord = divMenuIr.offset().top;
 			}
 			if (this.nivel.alinharCoordenadaXMenuPai) {
-				this.childArea.setStyle({
-					left: xCoord+"px"
-				});
+				this.childArea.css("left", xCoord+"px");
 			}
-			this.childArea.setStyle({
-				top: yCoord+"px"
-			});
+			this.childArea.css("top", yCoord+"px");
 		}
 	};
 	
@@ -443,8 +493,8 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	this.mouseOver = function(){
 		var nivel=this.getNivel();
 		if (nivel.estiloHover != nivel.estilo) {
-			this.divMenuItem.addClassName(nivel.estiloHover);
-			this.divMenuItem.removeClassName(nivel.estilo);
+			this.divMenuItem.addClass(nivel.estiloHover);
+			this.divMenuItem.removeClass(nivel.estilo);
 		} 
 		if(this.hasChildNodes()){
 			this.showDivArea();
@@ -459,8 +509,8 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	this.mouseOut = function(){
 		var nivel = this.getNivel();
 		if (nivel.estiloHover != nivel.estilo) {
-			this.divMenuItem.addClassName(nivel.estilo);
-			this.divMenuItem.removeClassName(nivel.estiloHover);
+			this.divMenuItem.addClass(nivel.estilo);
+			this.divMenuItem.removeClass(nivel.estiloHover);
 		}
 		if(this.hasChildNodes() && !nivel.expandirSubNiveis){
 			this.hideDivArea();
@@ -634,12 +684,10 @@ function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, taman
 	 */
 	this.indiceNivelVisual = null;
 	
-	
 	/**
 	 * Índice do nível sendo o zero o primeiro nível.
 	 */
 	this.indiceNivel = null;
-	
 	
 	/**
 	 * Indica se este nível deve ser alinhado com o menu que o abriu.
@@ -659,7 +707,7 @@ function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, taman
 	 * Ajuste de distância do sub-menu para o menu pai respectivo.
 	 * @type Number
 	 */
-	this.ajusteDistanciaMenu = -7;
+	this.ajusteDistanciaMenu = 1;
 	
 	/**
 	 * Verificar se a orientação é horizontal ou vertical
@@ -697,7 +745,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	 * body ou div
 	 * @type HTMLElement
 	 */
-	this.parentElement = parentElement;
+	this.parentElement = $("#" + parentElement);
 	
 	/**
 	 * Posição onde será inserido o menu, para saber as posições do menu consulte a 
@@ -743,7 +791,8 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	this.getNivel = function(indice, add){
 		var nivel = this.niveis[indice];
 		if(add && (nivel == undefined || nivel == null)){
-			nivel = Object.clone(this.niveis.last());
+			var ultimoNivel = this.niveis[this.niveis.length - 1];
+			nivel = jQuery.extend({}, ultimoNivel);
 			this.niveis.push(nivel);
 		}
 		return nivel;
@@ -805,7 +854,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;
-				menuItem.elementoInicial = $(this.parentElement);
+				menuItem.elementoInicial = this.parentElement;
 				menuItem.insertPosition = this.insertion;
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
@@ -813,14 +862,16 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			menuItem.setNivel(nivel);
 			
 			menuItem.buildItem();
-			Event.observe(window, "resize", menuItem.ajustarPosicao.bind(menuItem));
-			Event.observe(menuItem.divMenuItem, "mouseover", this.mouseOver.bind(this, menuItem, indiceNivel));
+			$(window).resize(jQuery.proxy(menuItem.ajustarPosicao, menuItem));
 			
-			Event.observe(menuItem.divMenuItem, "mouseover", this.registrarMouseOver.bind(this));
-			Event.observe(menuItem.divMenuItem, "mouseout", this.registrarMouseOut.bind(this));
+			menuItem.divMenuItem.mouseover(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
+			
+			menuItem.divMenuItem.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+			menuItem.divMenuItem.mouseout(jQuery.proxy(this.registrarMouseOut, this));
+			
 			if(menuItem.childArea != null){
-				Event.observe(menuItem.childArea, "mouseover", this.registrarMouseOver.bind(this));
-				Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
+				menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+				menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
 			}
 			if(menuItem.hasChildNodes()){
 				this.construirSub(menuItem.childMenuItem, indiceNivel+1);
