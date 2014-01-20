@@ -745,7 +745,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	 * body ou div
 	 * @type HTMLElement
 	 */
-	this.parentElement = $("#" + parentElement);
+	this.parentElement = null;
 	
 	/**
 	 * Posição onde será inserido o menu, para saber as posições do menu consulte a 
@@ -791,11 +791,28 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	this.getNivel = function(indice, add){
 		var nivel = this.niveis[indice];
 		if(add && (nivel == undefined || nivel == null)){
-			var ultimoNivel = this.niveis[this.niveis.length - 1];
-			nivel = jQuery.extend({}, ultimoNivel);
+			nivel = this.clonarUltimoNivel();
 			this.niveis.push(nivel);
 		}
 		return nivel;
+	};
+	
+	/**
+	 * Atribuir o elemento onde o menu será criado.
+	 * @param {String} parentElement
+	 */
+	this.setParentElement = function(parentElement) {
+		this.parentElement = $("#" + this.parentElement);
+	};
+	this.setParentElement(parentElement);
+	
+	/**
+	 * Clonar o último nível
+	 * @returns Nivel
+	 */
+	this.clonarUltimoNivel = function() {
+		var ultimoNivel = this.niveis[this.niveis.length - 1];
+		return jQuery.extend({}, ultimoNivel);
 	};
 	
 	/**
@@ -862,20 +879,30 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			menuItem.setNivel(nivel);
 			
 			menuItem.buildItem();
-			$(window).resize(jQuery.proxy(menuItem.ajustarPosicao, menuItem));
 			
-			menuItem.divMenuItem.mouseover(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
+			this.registrarEventosDefault(menuItem);
 			
-			menuItem.divMenuItem.mouseover(jQuery.proxy(this.registrarMouseOver, this));
-			menuItem.divMenuItem.mouseout(jQuery.proxy(this.registrarMouseOut, this));
-			
-			if(menuItem.childArea != null){
-				menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
-				menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
-			}
 			if(menuItem.hasChildNodes()){
 				this.construirSub(menuItem.childMenuItem, indiceNivel+1);
 			}			
+		}
+	};
+	
+	/**
+	 * Registrar os eventos de funcionalidade do menu.
+	 * @param {MenuItem} menuItem
+	 */
+	this.registrarEventosDefault = function(menuItem) {
+		$(window).resize(jQuery.proxy(menuItem.ajustarPosicao, menuItem));
+		
+		menuItem.divMenuItem.mouseover(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
+		
+		menuItem.divMenuItem.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+		menuItem.divMenuItem.mouseout(jQuery.proxy(this.registrarMouseOut, this));
+		
+		if(menuItem.childArea != null){
+			menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+			menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
 		}
 	};
 	
