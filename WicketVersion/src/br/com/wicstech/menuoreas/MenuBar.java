@@ -98,7 +98,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 		for (Nivel nivel : this.niveis) {
 			javascript.append(varFactoryMenu + ".addNivel(new Nivel(");
-			javascript.append(nivel.isOrientacao());
+			javascript.append(nivel.getOrientacao());
 
 			javascript.append(",");
 			javascript.append(getStringParam(nivel.getStyleClass()));
@@ -121,6 +121,8 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(nivel.getHeightDefault());
 			javascript.append(',');
 			javascript.append(nivel.isTamanhoRelativo());
+			javascript.append(',');
+			javascript.append(nivel.isExpandirSubNiveis());
 			javascript.append("));\r\n");
 		}
 		javascript.append(varFactoryMenu + ".construirMenu()");
