@@ -117,7 +117,7 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * 
 	 * @type String
 	 */
-	this.insertPosition = null;
+	this.insertPosition = "top";
 	
 	/**
 	 * Destino onde a página deverá ser carregada
@@ -640,7 +640,6 @@ function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, taman
 	 */
 	this.indiceNivel = null;
 	
-	
 	/**
 	 * Indica se este nível deve ser alinhado com o menu que o abriu.
 	 * Caso contrário, ele alinha com o início da página.
@@ -697,7 +696,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	 * body ou div
 	 * @type HTMLElement
 	 */
-	this.parentElement = parentElement;
+	this.parentElement = null;
 	
 	/**
 	 * Posição onde será inserido o menu, para saber as posições do menu consulte a 
@@ -743,10 +742,27 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	this.getNivel = function(indice, add){
 		var nivel = this.niveis[indice];
 		if(add && (nivel == undefined || nivel == null)){
-			nivel = Object.clone(this.niveis.last());
+			nivel = this.clonarUltimoNivel();
 			this.niveis.push(nivel);
 		}
 		return nivel;
+	};
+	
+	/**
+	 * Atribuir o elemento onde o menu será criado.
+	 * @param {String} parentElement
+	 */
+	this.setParentElement = function(parentElement) {
+		this.parentElement = $(this.parentElement);
+	};
+	this.setParentElement(parentElement);
+	
+	/**
+	 * Clonar o último nível
+	 * @returns Nivel
+	 */
+	this.clonarUltimoNivel = function() {
+		return Object.clone(this.niveis.last());
 	};
 	
 	/**
@@ -805,7 +821,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;
-				menuItem.elementoInicial = $(this.parentElement);
+				menuItem.elementoInicial = this.parentElement;
 				menuItem.insertPosition = this.insertion;
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
@@ -813,18 +829,28 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			menuItem.setNivel(nivel);
 			
 			menuItem.buildItem();
-			Event.observe(window, "resize", menuItem.ajustarPosicao.bind(menuItem));
-			Event.observe(menuItem.divMenuItem, "mouseover", this.mouseOver.bind(this, menuItem, indiceNivel));
 			
-			Event.observe(menuItem.divMenuItem, "mouseover", this.registrarMouseOver.bind(this));
-			Event.observe(menuItem.divMenuItem, "mouseout", this.registrarMouseOut.bind(this));
-			if(menuItem.childArea != null){
-				Event.observe(menuItem.childArea, "mouseover", this.registrarMouseOver.bind(this));
-				Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
-			}
+			this.registrarEventosDefault(menuItem);
+			
 			if(menuItem.hasChildNodes()){
 				this.construirSub(menuItem.childMenuItem, indiceNivel+1);
 			}			
+		}
+	};
+	
+	/**
+	 * Registrar os eventos de funcionalidade do menu.
+	 * @param {MenuItem} menuItem
+	 */
+	this.registrarEventosDefault = function(menuItem) {
+		Event.observe(window, "resize", menuItem.ajustarPosicao.bind(menuItem));
+		Event.observe(menuItem.divMenuItem, "mouseover", this.mouseOver.bind(this, menuItem, indiceNivel));
+		
+		Event.observe(menuItem.divMenuItem, "mouseover", this.registrarMouseOver.bind(this));
+		Event.observe(menuItem.divMenuItem, "mouseout", this.registrarMouseOut.bind(this));
+		if(menuItem.childArea != null){
+			Event.observe(menuItem.childArea, "mouseover", this.registrarMouseOver.bind(this));
+			Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
 		}
 	};
 	
