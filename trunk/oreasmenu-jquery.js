@@ -263,12 +263,9 @@ MenuItem.prototype.ajustarPosicao = function(){
 	}
 };
 	
-	
 /**
  * Trocar estilo do botão e exibir a área de submenus associada 
  * a esse menuItem
- * 
- * @returns
  */
 MenuItem.prototype.mouseOver = function(){
 	var nivel=this.getNivel();
@@ -284,7 +281,6 @@ MenuItem.prototype.mouseOver = function(){
 /**
  * Voltar o estilo original do menuItem e esconder a área de submenus
  * associada a ele
- * @returns
  */
 MenuItem.prototype.mouseOut = function(){
 	var nivel = this.getNivel();
@@ -296,9 +292,7 @@ MenuItem.prototype.mouseOut = function(){
 		this.hideDivArea();
 	}
 };
-	
 
-	
 /**
  * Atribuir o elemento onde o menu será criado.
  */
@@ -314,7 +308,6 @@ FactoryMenu.prototype.clonarUltimoNivel = function() {
 	var ultimoNivel = this.niveis[this.niveis.length - 1];
 	return jQuery.extend({}, ultimoNivel);
 };
-	
 	
 /**
  * Registrar os eventos de funcionalidade do menu.
