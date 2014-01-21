@@ -182,13 +182,15 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		var dimension = new Object();
 		var width=this.getWidth();
 		var height=this.getHeight();
-		if (this.nivel.tamanhoRelativo) {
-			dimension.width = dimension.height = "100%";
+		
+		if (this.getNivel().tamanhoRelativo) {
+			width = height = 100;
 		}
-		if (!this.nivel.tamanhoRelativo && width != 0) {
+		
+		if (width != 0) {
 			dimension.width = width+this.getUnidadeMedida();
 		} 
-		if (!this.nivel.tamanhoRelativo && height != 0) {
+		if (height != 0) {
 			dimension.height = height+this.getUnidadeMedida();
 		}
 		return dimension;
@@ -199,11 +201,13 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * @returns {Object}
 	 */
 	this.getClipDimensions = function() {
-		var dimension = this.getDimensions();
-		if (("width" in dimension) && "height" in dimension) {
-			var width=this.getWidth();
-			var height=this.getHeight();
+		var dimension = new Object();
+		var width=this.getWidth();
+		var height=this.getHeight();
+		if (width != 0 && height != 0) {
 			dimension.clip = "rect(0px, "+(width+2)+this.getUnidadeMedida()+", "+(height+2)+this.getUnidadeMedida()+", 0px)";
+			dimension.width = width+this.getUnidadeMedida();
+			dimension.height = height+this.getUnidadeMedida();
 		}
 		return dimension;
 	};
@@ -213,7 +217,7 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * @returns String
 	 */
 	this.getUnidadeMedida = function(){
-		if(this.nivel.tamanhoRelativo){
+		if(this.getNivel().tamanhoRelativo){
 			return "%";
 		}
 		return "px";

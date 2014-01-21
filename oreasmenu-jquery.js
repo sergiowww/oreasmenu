@@ -301,9 +301,8 @@ MenuItem.prototype.mouseOut = function(){
 	
 /**
  * Atribuir o elemento onde o menu será criado.
- * @param {String} parentElement
  */
-FactoryMenu.prototype.lookupParentElement = function(parentElement) {
+FactoryMenu.prototype.lookupParentElement = function() {
 	this.parentElement = $("#" + this.parentElement);
 };
 	
