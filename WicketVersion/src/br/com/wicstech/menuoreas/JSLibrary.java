@@ -1,7 +1,6 @@
 package br.com.wicstech.menuoreas;
 
-import org.wicketstuff.jslibraries.Library;
-import org.wicketstuff.jslibraries.VersionDescriptor;
+import org.apache.wicket.ResourceReference;
 
 /**
  * Biblioteca Javascript para ser utilizada com o menu.
@@ -10,20 +9,30 @@ import org.wicketstuff.jslibraries.VersionDescriptor;
  * 
  */
 public enum JSLibrary {
-	PROTOTYPE_JS(VersionDescriptor.exactVersion(Library.PROTOTYPE, 1, 6)),
+	PROTOTYPE_JS(new ResourceReference(JSLibrary.class, "libraries/prototype.js"), "prototype"),
 
-	JQUERY(VersionDescriptor.alwaysLatestOfVersion(Library.JQUERY, 1, 4));
+	JQUERY(new ResourceReference(JSLibrary.class, "libraries/jquery-1.10.2.js"), "jquery");
 
-	private VersionDescriptor descriptor;
+	private ResourceReference lib;
+	private String id;
 
-	private JSLibrary(VersionDescriptor descriptor) {
-		this.descriptor = descriptor;
+	private JSLibrary(ResourceReference lib, String id) {
+		this.lib = lib;
+		this.id = id;
 	}
 
 	/**
-	 * @return the descriptor
+	 * @return the lib
 	 */
-	public VersionDescriptor getDescriptor() {
-		return descriptor;
+	public ResourceReference getLib() {
+		return lib;
 	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
 }

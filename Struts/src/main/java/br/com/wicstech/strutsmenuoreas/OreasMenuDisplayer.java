@@ -23,6 +23,9 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 public class OreasMenuDisplayer extends MessageResourcesMenuDisplayer {
+	private static final String KEY_LIBRARY = "library";
+	private static final String KEY_ALINHAR_COORDENADA_X_MENU_PAI = ".alinharCoordenadaXMenuPai";
+	private static final String KEY_EXPANDIR_SUB_NIVEIS = ".expandirSubNiveis";
 	private static final String FACTORY_PREFIX = "factory";
 	private static final String KEY_INSERT_POSITION = "insert.position";
 	private static final String KEY_ID_CONTAINER = "id.container";
@@ -39,14 +42,20 @@ public class OreasMenuDisplayer extends MessageResourcesMenuDisplayer {
 	@Override
 	public void init(PageContext pageContext, MenuDisplayerMapping mapping) {
 		super.init(pageContext, mapping);
-		InputStream enginejs = OreasMenuDisplayer.class.getResourceAsStream("/br/com/wicstech/strutsmenuoreas/oreasmenu.js");
+		InputStream commons_js = OreasMenuDisplayer.class.getResourceAsStream("/br/com/wicstech/strutsmenuoreas/commons.js");
+		InputStream libjs = null;
 		InputStream configuracao = pageContext.getServletContext().getResourceAsStream(getConfig());
+
 		try {
-			out.print("<script type=\"text/javascript\">\r\n");
-			IOUtils.copy(enginejs, out);
-			out.print("</script>");
+
 			Properties config = new Properties();
 			config.load(configuracao);
+			libjs = OreasMenuDisplayer.class.getResourceAsStream("/br/com/wicstech/strutsmenuoreas/oreasmenu-" + config.getProperty(KEY_LIBRARY) + ".js");
+
+			out.print("<script type=\"text/javascript\">\r\n");
+			IOUtils.copy(commons_js, out);
+			IOUtils.copy(libjs, out);
+			out.print("</script>");
 
 			String varFactoryMenu = FACTORY_PREFIX + mapping.getName();
 			StringBuilder javascript = new StringBuilder();
@@ -82,6 +91,10 @@ public class OreasMenuDisplayer extends MessageResourcesMenuDisplayer {
 				javascript.append(config.getProperty(KEY_NIVEL + i + KEY_HEIGHT_DEFAULT));
 				javascript.append(',');
 				javascript.append(config.getProperty(KEY_NIVEL + i + KEY_TAMANHO_RELATIVO));
+				javascript.append(',');
+				javascript.append(config.getProperty(KEY_NIVEL + i + KEY_ALINHAR_COORDENADA_X_MENU_PAI));
+				javascript.append(',');
+				javascript.append(config.getProperty(KEY_NIVEL + i + KEY_EXPANDIR_SUB_NIVEIS));
 				javascript.append("));\r\n");
 			}
 			out.print("<script type=\"text/javascript\">\r\n");
@@ -91,7 +104,8 @@ public class OreasMenuDisplayer extends MessageResourcesMenuDisplayer {
 			log.error(e, e);
 		} finally {
 			IOUtils.closeQuietly(configuracao);
-			IOUtils.closeQuietly(enginejs);
+			IOUtils.closeQuietly(commons_js);
+			IOUtils.closeQuietly(libjs);
 		}
 	}
 
