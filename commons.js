@@ -242,9 +242,6 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		return target;
 	};
 	
-	
-	
-	
 	/**
 	 * Mostrar a área de submenus associada a esse menuItem
 	 */
@@ -252,7 +249,6 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		this.ajustarPosicao();
 		this.childArea.show();
 	};
-	
 	
 	/**
 	 * Esconder a área de submenus associada a esse item
@@ -300,23 +296,6 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 */
 	this.getNivel = function(){
 		return this.nivel;
-	};
-	
-	/**
-	 * Setar o nível desse menu
-	 * @param {Nivel} nivel
-	 * @returns void
-	 */
-	this.setNivel = function(nivel){
-		this.nivel = nivel;
-	};
-	
-	/**
-	 * Setar o grupo do menu deste item.
-	 * @param {String} menuGroup
-	 */
-	this.setMenuGroup = function(menuGroup){
-		this.menuGroup = menuGroup;
 	};
 	
 	/**
@@ -595,7 +574,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			 * @type MenuItem
 			 */
 			var menuItem = menus[i];
-			menuItem.setMenuGroup(this.menuGroup);
+			menuItem.menuGroup = this.menuGroup;
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;
@@ -604,7 +583,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			}
 			nivel.indiceNivelVisual = this.niveis.length - indiceNivel;
 			nivel.indiceNivel = indiceNivel;
-			menuItem.setNivel(nivel);
+			menuItem.nivel = nivel;
 			
 			menuItem.buildItem();
 			
@@ -615,7 +594,6 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			}			
 		}
 	};
-	
 	
 	/**
 	 * Registrar que mouse está sobre um menu

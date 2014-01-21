@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.wicstech</groupId>
+	<artifactId>menuoreas</artifactId>
+	<version>3.0</version>
+	<name>Componente Gerador de Menu</name>
+	<description>Gerador de menu Wicket</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
+			<version>6.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-jslibraries</artifactId>
+			<version>6.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>build-jar</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>../</directory>
+						<includes>
+							<include>*.js</include>
+						</includes>
+						<targetPath>net/wicstech/menuwicket/js</targetPath>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>net.alchim31.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin</artifactId>
+						<version>1.3.3</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compress</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<nosuffix>true</nosuffix>
+									<includes>
+										<include>*.js</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
