@@ -40,11 +40,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>jslibraries</artifactId>
-			<version>1.4.21</version>
-		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

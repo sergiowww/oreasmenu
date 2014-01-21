@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.string.JavascriptUtils;
-import org.wicketstuff.jslibraries.JSReference;
 
 /**
  * Barra de menu.
@@ -62,7 +61,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavascriptReference(JSReference.getReference(jsLibrary.getDescriptor()), "prototype");
+		response.renderJavascriptReference(jsLibrary.getLib(), jsLibrary.getId());
 		response.renderJavascriptReference(JS_COMMONS);
 		if (JSLibrary.JQUERY.equals(jsLibrary)) {
 			response.renderJavascriptReference(JS_OREAS_JQUERY);
