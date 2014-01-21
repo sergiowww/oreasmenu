@@ -1,0 +1,42 @@
+@CHARSET "ISO-8859-1";
+
+.menuCategorias-cmMenu div:FIRST-CHILD {
+	width: 80%;
+	text-align: center;
+}
+.menuCategorias-cmMenuOver div:FIRST-CHILD {
+	width: 80%;
+	text-align: center;
+}
+.menuCategorias-cmMenuItem, .menuCategorias-cmMenuItemOver, .menuCategorias-cmMenu, .menuCategorias-cmMenuOver{
+	color: white;
+	text-shadow: 2px 2px black;
+	border: 1px solid white;
+}
+.menuCategorias-cmMenu, .menuCategorias-cmMenuOver{
+	background-image: url("menuCategorias-fundo.png");
+	background-repeat: repeat-x;
+	padding-top: 2px;
+	height: 21px !important;
+}
+.menuCategorias-cmMenuItem, .menuCategorias-cmMenuItemOver{
+	background-color: #B41E1A;
+	padding-left: 10px;
+}
+
+.menuCategorias-cmMenuOver, .menuCategorias-cmMenuItemOver{
+	font-weight: bold;
+}
+
+div[class^="menuCategorias-cmMenuBorder"]{
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+div[class^="menuCategorias-cmItemBorder"]{
+	box-shadow: 0 6px 10px #888888;
+}
+div[class^="menuCategorias-cmMenuBorder"] a{
+	float: left;
+	width: 100%;
+}

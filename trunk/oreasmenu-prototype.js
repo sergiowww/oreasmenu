@@ -251,9 +251,6 @@ MenuItem.prototype.mouseOut = function(){
 	}
 };
 
-
-
-
 /**
  * Atribuir o elemento onde o menu será criado.
  */
