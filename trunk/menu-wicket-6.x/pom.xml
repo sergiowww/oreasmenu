@@ -77,4 +77,11 @@
 			</build>
 		</profile>
 	</profiles>
+	<organization>
+		<name>WicsTech</name>
+		<url>wicstech.net</url>
+	</organization>
+	<scm>
+		<url>https://oreasmenu.googlecode.com/svn/trunk/</url>
+	</scm>
 </project>

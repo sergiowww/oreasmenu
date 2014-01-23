@@ -35,7 +35,6 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	private static final JavaScriptResourceReference JS_MENU_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final JavaScriptResourceReference JS_COMMONS = new JavaScriptResourceReference(MenuBar.class, "js/commons.js");
 
-
 	private JSLibrary jsLibrary = JSLibrary.PROTOTYPE_JS;
 
 	private String idContainer;
@@ -193,15 +192,16 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private void buildJsMenu(List<MenuItem> menus, StringBuilder javascript, StringBuilder parentMenu) {
 		int indiceMenu = NumberUtils.INTEGER_ZERO;
-		StringBuilder menuName = null;
+		StringBuilder baseName = null;
 		if (parentMenu == null) {
-			menuName = new StringBuilder(VARIABLE_PREFIX);
+			baseName = new StringBuilder(VARIABLE_PREFIX);
 		} else {
-			menuName = new StringBuilder(parentMenu).append('_');
+			baseName = new StringBuilder(parentMenu).append('_');
 		}
 
 		for (MenuItem menuItem : menus) {
 			javascript.append("var ");
+			StringBuilder menuName = new StringBuilder(baseName);
 			menuName.append(indiceMenu++);
 			javascript.append(menuName);
 			javascript.append(" = new MenuItem(");
