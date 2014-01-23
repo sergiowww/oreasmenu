@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -25,10 +27,8 @@ import org.wicketstuff.jslibraries.util.Assert;
  */
 public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
-	private static final JavaScriptResourceReference JS_OREAS_PROTOTYPE = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-prototype.js");
-
-	private static final JavaScriptResourceReference JS_OREAS_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
-
+	private static final JavaScriptResourceReference JS_MENU_PROTOTYPE = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-prototype.js");
+	private static final JavaScriptResourceReference JS_MENU_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final JavaScriptResourceReference JS_COMMONS = new JavaScriptResourceReference(MenuBar.class, "js/commons.js");
 
 	private static final long serialVersionUID = -8683400812756686255L;
@@ -56,6 +56,33 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	}
 
 	/**
+	 * Construtor com lista de menus vazia.
+	 * 
+	 * @param id
+	 */
+	public MenuBar(String id) {
+		this(id, new ArrayList<MenuItem>());
+	}
+
+	/**
+	 * Retorna o listmodel associado.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Model<MenuItem> getModel() {
+		return (Model<MenuItem>) getDefaultModel();
+	}
+
+	/**
+	 * @return Lista de menus
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MenuItem> getMenuList() {
+		return (List<MenuItem>) getDefaultModelObject();
+	}
+
+	/**
 	 * Adicionar um nível no menu.
 	 * 
 	 * @param nivel
@@ -68,10 +95,10 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		response.render(JavaScriptHeaderItem.forReference(JSReference.getReference(jsLibrary.getDescriptor())));
 		response.render(JavaScriptHeaderItem.forReference(JS_COMMONS));
 		if (JSLibrary.JQUERY.equals(jsLibrary)) {
-			response.render(JavaScriptHeaderItem.forReference(JS_OREAS_JQUERY));
+			response.render(JavaScriptHeaderItem.forReference(JS_MENU_JQUERY));
 		}
 		if (JSLibrary.PROTOTYPE_JS.equals(jsLibrary)) {
-			response.render(JavaScriptHeaderItem.forReference(JS_OREAS_PROTOTYPE));
+			response.render(JavaScriptHeaderItem.forReference(JS_MENU_PROTOTYPE));
 		}
 		renderMenu(response);
 	}
@@ -87,7 +114,11 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		JavaScriptUtils.writeCloseTag(getResponse());
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Renderizar o menu em javascript.
+	 * 
+	 * @param response
+	 */
 	private void renderMenu(IHeaderResponse response) {
 		idMenuItem = 0;
 		StringBuilder javascript = new StringBuilder("if(typeof MenuBar == \"undefined\"){MenuBar = new Object();}");
@@ -96,7 +127,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		javascript.append("= function(){");
 
 		javascript.append("var menus = new Array();\r\n");
-		List<MenuItem> menuItens = (List<MenuItem>) getDefaultModelObject();
+		List<MenuItem> menuItens = getMenuList();
 		for (MenuItem menuItem : menuItens) {
 			buildJsMenu(menuItem, javascript, null);
 		}
@@ -105,6 +136,11 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		response.render(JavaScriptHeaderItem.forScript(javascript.toString(), "javascript" + getMarkupId()));
 	}
 
+	/**
+	 * Gerar chamada as configurações de níveis do menu.
+	 * 
+	 * @param javascript
+	 */
 	private void buildNivelConfig(StringBuilder javascript) {
 		Assert.isFalse(this.niveis.isEmpty(), "É necessário fornecer ao menos um nível para determinar as configurações do menu!");
 		String varFactoryMenu = "factory" + menuGroup;
@@ -151,7 +187,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private String getStringParam(CharSequence valor) {
 		if (valor == null) {
-			return "" + valor;
+			return StringUtils.EMPTY + valor;
 		}
 		return "\"" + valor + "\"";
 	}
