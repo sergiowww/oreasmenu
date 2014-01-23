@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
@@ -147,7 +148,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private String getStringParam(CharSequence valor) {
 		if (valor == null) {
-			return "" + valor;
+			return StringUtils.EMPTY + valor;
 		}
 		return "\"" + valor + "\"";
 	}
