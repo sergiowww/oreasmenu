@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
@@ -13,6 +15,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.string.JavascriptUtils;
 
@@ -26,18 +29,22 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private static final long serialVersionUID = -8683400812756686255L;
 
+	private static final String QUEBRA_LINHA = "\r\n";
+	private static final char VIRGULA = ',';
+	private static final String VARIABLE_PREFIX = "m";
+	private static final String JS_NULL_STRING = "null";
+
 	private static final ResourceReference JS_OREAS_PROTOTYPE = new ResourceReference(MenuBar.class, "js/oreasmenu-prototype.js");
 	private static final ResourceReference JS_OREAS_JQUERY = new ResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final ResourceReference JS_COMMONS = new ResourceReference(MenuBar.class, "js/commons.js");
 
 	private JSLibrary jsLibrary = JSLibrary.PROTOTYPE_JS;
 
-	private String idContainer, //
-			menuGroup, //
-			insertPosition = "top";
+	private String idContainer;
+	private String menuGroup;
+	private String insertPosition = "top";
 
 	private List<Nivel> niveis = new ArrayList<Nivel>();
-	private Integer idMenuItem = 0;
 
 	/**
 	 * 
@@ -50,6 +57,15 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		this.menuGroup = id;
 		setOutputMarkupId(true);
 		this.idContainer = getMarkupId();
+	}
+
+	/**
+	 * Construtor somente com o id.
+	 * 
+	 * @param id
+	 */
+	public MenuBar(String id) {
+		this(id, new ArrayList<MenuItem>());
 	}
 
 	/**
@@ -84,64 +100,67 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		JavascriptUtils.writeCloseTag(getResponse());
 	}
 
-	@SuppressWarnings("unchecked")
 	private void renderMenu(IHeaderResponse response) {
-		idMenuItem = 0;
 		StringBuilder javascript = new StringBuilder("if(typeof MenuBar == \"undefined\"){MenuBar = new Object();}");
 		javascript.append("MenuBar.");
 		javascript.append(this.idContainer);
 		javascript.append("= function(){");
 
-		javascript.append("var menus = new Array();\r\n");
-		List<MenuItem> menuItens = (List<MenuItem>) getDefaultModelObject();
-		for (MenuItem menuItem : menuItens) {
-			buildJsMenu(menuItem, javascript, null);
-		}
+		javascript.append("var menus = new Array();");
+		adicionarQuebraLinha(javascript);
+		List<MenuItem> menuItens = getMenuList();
+		buildJsMenu(menuItens, javascript, null);
 		buildNivelConfig(javascript);
 		javascript.append(";}");
 		response.renderJavascript(javascript.toString(), "javascript" + getMarkupId());
 	}
 
+	/**
+	 * Gerar chamada as configurações de níveis do menu.
+	 * 
+	 * @param javascript
+	 */
 	private void buildNivelConfig(StringBuilder javascript) {
+		if (this.niveis.isEmpty()) {
+			throw new IllegalArgumentException("É necessário fornecer ao menos um nível para determinar as configurações do menu!");
+		}
 		String varFactoryMenu = "factory" + menuGroup;
-		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\", \"" + idContainer + "\", \"" + insertPosition + "\");\r\n");
-
+		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\", \"" + idContainer + "\", \"" + insertPosition + "\");");
+		adicionarQuebraLinha(javascript);
 		for (Nivel nivel : this.niveis) {
 			javascript.append(varFactoryMenu + ".addNivel(new Nivel(");
 			javascript.append(nivel.getOrientacao());
 
-			javascript.append(",");
+			javascript.append(VIRGULA);
 			javascript.append(getStringParam(nivel.getStyleClass()));
-			javascript.append("");
 
-			javascript.append(",");
+			javascript.append(VIRGULA);
 			javascript.append(getStringParam(nivel.getStyleClassHover()));
-			javascript.append("");
 
 			if (nivel.getImagemSeta() == null) {
-				javascript.append(", null");
+				javascript.append(VIRGULA).append(JS_NULL_STRING);
 			} else {
-				javascript.append(",");
+				javascript.append(VIRGULA);
 				javascript.append(getStringParam(getImageUrl(nivel.getImagemSeta())));
-				javascript.append("");
 			}
-			javascript.append(',');
+			javascript.append(VIRGULA);
 			javascript.append(nivel.getWidthDefault());
-			javascript.append(',');
+			javascript.append(VIRGULA);
 			javascript.append(nivel.getHeightDefault());
-			javascript.append(',');
+			javascript.append(VIRGULA);
 			javascript.append(nivel.isTamanhoRelativo());
-			javascript.append(',');
+			javascript.append(VIRGULA);
 			javascript.append(nivel.isAlinharCoordenadaXMenuPai());
-			javascript.append(',');
+			javascript.append(VIRGULA);
 			javascript.append(nivel.isExpandirSubNiveis());
-			javascript.append(")");
+			javascript.append(')');
 			if (nivel.getAjusteDistanciaMenu() != null) {
 				javascript.append(".setAjusteDistanciaMenu(");
 				javascript.append(nivel.getAjusteDistanciaMenu());
-				javascript.append(")");
+				javascript.append(')');
 			}
-			javascript.append(");\r\n");
+			javascript.append(");");
+			adicionarQuebraLinha(javascript);
 		}
 		javascript.append(varFactoryMenu + ".construirMenu()");
 	}
@@ -153,51 +172,64 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		return "\"" + valor + "\"";
 	}
 
-	private void buildJsMenu(MenuItem menuItem, StringBuilder javascript, String parentMenu) {
-
-		String menuName = "menu" + (idMenuItem++);
-		javascript.append("var ");
-		javascript.append(menuName);
-		javascript.append(" = new MenuItem(");
-		javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuItem.getTitulo())));
-		javascript.append(',');
-		javascript.append(getStringParam(getImageUrl(menuItem.getImagem())));
-		javascript.append(',');
-		javascript.append("" + menuItem.getWidth());
-		javascript.append(',');
-		javascript.append("" + menuItem.getHeight());
-		javascript.append(',');
-		javascript.append(getStringParam(getUrlDestino(menuItem)));
-		javascript.append(',');
-		javascript.append(getStringParam(menuItem.getTarget() == null ? null : menuItem.getTarget().getTargetHTMLString()));
-		javascript.append(',');
-		javascript.append("" + menuItem.getOnclick());
-		javascript.append(',');
-		javascript.append("" + menuItem.getOnmouseover());
-		javascript.append(',');
-		javascript.append("" + menuItem.getOnmouseout());
-		javascript.append(',');
-		javascript.append(getStringParam(menuItem.getAlign()));
-		javascript.append(");\r\n");
-		if (menuItem.getToolTip() != null) {
-			javascript.append(menuName);
-			javascript.append(".hint = ");
-			javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuItem.getToolTip())));
-			javascript.append(";\r\n");
-		}
-		if (parentMenu != null) {
-			javascript.append(menuName);
-			javascript.append(".setParentMenuItem(");
-			javascript.append(parentMenu);
-			javascript.append(");\r\n");
+	private void buildJsMenu(List<MenuItem> menus, StringBuilder javascript, StringBuilder parentMenu) {
+		int indiceMenu = NumberUtils.INTEGER_ZERO;
+		StringBuilder baseName = null;
+		if (parentMenu == null) {
+			baseName = new StringBuilder(VARIABLE_PREFIX);
 		} else {
-			javascript.append("menus.push(");
+			baseName = new StringBuilder(parentMenu).append('_');
+		}
+
+		for (MenuItem menuItem : menus) {
+			javascript.append("var ");
+			StringBuilder menuName = new StringBuilder(baseName);
+			menuName.append(indiceMenu++);
 			javascript.append(menuName);
-			javascript.append(");\r\n");
+			javascript.append(" = new MenuItem(");
+			javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuItem.getTitulo())));
+			javascript.append(VIRGULA);
+			javascript.append(getStringParam(getImageUrl(menuItem.getImagem())));
+			javascript.append(VIRGULA);
+			javascript.append(menuItem.getWidth());
+			javascript.append(VIRGULA);
+			javascript.append(menuItem.getHeight());
+			javascript.append(VIRGULA);
+			javascript.append(getStringParam(getUrlDestino(menuItem)));
+			javascript.append(VIRGULA);
+			javascript.append(getStringParam(menuItem.getTarget() == null ? null : menuItem.getTarget().getTargetHTMLString()));
+			javascript.append(VIRGULA);
+			javascript.append(menuItem.getOnclick());
+			javascript.append(VIRGULA);
+			javascript.append(menuItem.getOnmouseover());
+			javascript.append(VIRGULA);
+			javascript.append(menuItem.getOnmouseout());
+			javascript.append(VIRGULA);
+			javascript.append(getStringParam(menuItem.getAlign()));
+			javascript.append(");");
+			adicionarQuebraLinha(javascript);
+			if (menuItem.getToolTip() != null) {
+				javascript.append(menuName);
+				javascript.append(".hint = ");
+				javascript.append(getStringParam(StringEscapeUtils.escapeJavaScript(menuItem.getToolTip())));
+				javascript.append(';');
+				adicionarQuebraLinha(javascript);
+			}
+			if (parentMenu != null) {
+				javascript.append(menuName);
+				javascript.append(".setParentMenuItem(");
+				javascript.append(parentMenu);
+				javascript.append(");");
+				adicionarQuebraLinha(javascript);
+			} else {
+				javascript.append("menus.push(");
+				javascript.append(menuName);
+				javascript.append(");");
+				adicionarQuebraLinha(javascript);
+			}
+			buildJsMenu(menuItem.getSubMenus(), javascript, menuName);
 		}
-		for (MenuItem subMenuItem : menuItem.getSubMenus()) {
-			buildJsMenu(subMenuItem, javascript, menuName);
-		}
+
 	}
 
 	private CharSequence getUrlDestino(MenuItem menuItem) {
@@ -228,5 +260,29 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	 */
 	public void setInsertPosition(String position) {
 		this.insertPosition = position;
+	}
+
+	/**
+	 * @return Lista de menus
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MenuItem> getMenuList() {
+		return (List<MenuItem>) getDefaultModelObject();
+	}
+
+	/**
+	 * Retorna o listmodel associado.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Model<MenuItem> getModel() {
+		return (Model<MenuItem>) getDefaultModel();
+	}
+
+	private void adicionarQuebraLinha(StringBuilder javascript) {
+		if (Application.DEVELOPMENT.equals(getApplication().getConfigurationType())) {
+			javascript.append(QUEBRA_LINHA);
+		}
 	}
 }

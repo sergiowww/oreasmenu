@@ -82,8 +82,6 @@
 		</profile>
 	</profiles>
 	<scm>
-		<developerConnection>Sergio Eduardo D Oliveira</developerConnection>
-		<connection>http://www.linkedin.com/in/sergioeduardo</connection>
 		<url>https://oreasmenu.googlecode.com/svn/trunk/</url>
 	</scm>
 	<organization>
