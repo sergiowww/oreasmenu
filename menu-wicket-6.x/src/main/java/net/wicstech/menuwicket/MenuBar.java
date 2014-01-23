@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
@@ -27,7 +26,8 @@ import org.wicketstuff.jslibraries.util.Assert;
  * 
  */
 public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
-
+	private static final long serialVersionUID = -3140579872935114663L;
+	private static final String QUEBRA_LINHA = "\r\n";
 	private static final char VIRGULA = ',';
 	private static final String VARIABLE_PREFIX = "m";
 	private static final String JS_NULL_STRING = "null";
@@ -35,13 +35,12 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	private static final JavaScriptResourceReference JS_MENU_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final JavaScriptResourceReference JS_COMMONS = new JavaScriptResourceReference(MenuBar.class, "js/commons.js");
 
-	private static final long serialVersionUID = -8683400812756686255L;
 
 	private JSLibrary jsLibrary = JSLibrary.PROTOTYPE_JS;
 
-	private String idContainer, //
-			menuGroup, //
-			insertPosition = "top";
+	private String idContainer;
+	private String menuGroup;
+	private String insertPosition = "top";
 
 	private List<Nivel> niveis = new ArrayList<Nivel>();
 
@@ -151,14 +150,14 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(varFactoryMenu + ".addNivel(new Nivel(");
 			javascript.append(nivel.getOrientacao());
 
-			javascript.append(",");
+			javascript.append(VIRGULA);
 			javascript.append(getStringParam(nivel.getStyleClass()));
 
-			javascript.append(",");
+			javascript.append(VIRGULA);
 			javascript.append(getStringParam(nivel.getStyleClassHover()));
 
 			if (nivel.getImagemSeta() == null) {
-				javascript.append(", ").append(JS_NULL_STRING);
+				javascript.append(VIRGULA).append(JS_NULL_STRING);
 			} else {
 				javascript.append(VIRGULA);
 				javascript.append(getStringParam(getImageUrl(nivel.getImagemSeta())));
@@ -194,16 +193,15 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private void buildJsMenu(List<MenuItem> menus, StringBuilder javascript, StringBuilder parentMenu) {
 		int indiceMenu = NumberUtils.INTEGER_ZERO;
-		StringBuilder baseName = null;
+		StringBuilder menuName = null;
 		if (parentMenu == null) {
-			baseName = new StringBuilder(VARIABLE_PREFIX);
+			menuName = new StringBuilder(VARIABLE_PREFIX);
 		} else {
-			baseName = new StringBuilder(parentMenu).append('_');
+			menuName = new StringBuilder(parentMenu).append('_');
 		}
 
 		for (MenuItem menuItem : menus) {
 			javascript.append("var ");
-			StringBuilder menuName = new StringBuilder(baseName);
 			menuName.append(indiceMenu++);
 			javascript.append(menuName);
 			javascript.append(" = new MenuItem(");
@@ -211,19 +209,19 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(VIRGULA);
 			javascript.append(getStringParam(getImageUrl(menuItem.getImagem())));
 			javascript.append(VIRGULA);
-			javascript.append(StringUtils.EMPTY + menuItem.getWidth());
+			javascript.append(menuItem.getWidth());
 			javascript.append(VIRGULA);
-			javascript.append(StringUtils.EMPTY + menuItem.getHeight());
+			javascript.append(menuItem.getHeight());
 			javascript.append(VIRGULA);
 			javascript.append(getStringParam(getUrlDestino(menuItem)));
 			javascript.append(VIRGULA);
 			javascript.append(getStringParam(menuItem.getTarget() == null ? null : menuItem.getTarget().getTargetHTMLString()));
 			javascript.append(VIRGULA);
-			javascript.append(StringUtils.EMPTY + menuItem.getOnclick());
+			javascript.append(menuItem.getOnclick());
 			javascript.append(VIRGULA);
-			javascript.append(StringUtils.EMPTY + menuItem.getOnmouseover());
+			javascript.append(menuItem.getOnmouseover());
 			javascript.append(VIRGULA);
-			javascript.append(StringUtils.EMPTY + menuItem.getOnmouseout());
+			javascript.append(menuItem.getOnmouseout());
 			javascript.append(VIRGULA);
 			javascript.append(getStringParam(menuItem.getAlign()));
 			javascript.append(");");
@@ -232,7 +230,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 				javascript.append(menuName);
 				javascript.append(".hint = ");
 				javascript.append(getStringParam(StringEscapeUtils.escapeEcmaScript(menuItem.getToolTip())));
-				javascript.append(";");
+				javascript.append(';');
 				adicionarQuebraLinha(javascript);
 			}
 			if (parentMenu != null) {
@@ -254,7 +252,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private void adicionarQuebraLinha(StringBuilder javascript) {
 		if (getApplication().usesDevelopmentConfig()) {
-			javascript.append("\r\n");
+			javascript.append(QUEBRA_LINHA);
 		}
 	}
 
