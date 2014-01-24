@@ -565,6 +565,9 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 		if(!this.mouseSobreMenu){
 			this.hideOutrosMenus(-1);
 		}
+		if (this.pe != null) {
+			this.pe.stop();
+		}
 	};
 	
 	/**
@@ -614,9 +617,10 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	 * Registrar que o mouse está fora do menu
 	 */
 	this.registrarMouseOut = function(){
-		this.pe = new PeriodicalExecuter(this.verificarMouseSobreMenu.bind(this), 0.5);
+		this.pe = new PeriodicalExecuter(this.abstractCallbackMouseOut(), 0.5);
 		this.mouseSobreMenu = false;
 	};
+	
 	
 	/**
 	 * Quando o usuário passar o mouse sobre um ítem de menu
