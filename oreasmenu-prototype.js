@@ -282,3 +282,10 @@ FactoryMenu.prototype.registrarEventosDefault = function(menuItem, indiceNivel) 
 		Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
 	}
 };
+
+/**
+ * Callback mouseout
+ */
+FactoryMenu.prototype.abstractCallbackMouseOut = function() {
+	return this.verificarMouseSobreMenu.bind(this);
+};

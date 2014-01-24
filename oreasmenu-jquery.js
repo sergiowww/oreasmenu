@@ -40,7 +40,7 @@ function PeriodicalExecuter(callback, frequency){
 			}
 		}
 	};
-	this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
+	this.timer = setInterval(jQuery.proxy(this.onTimerEvent, this), this.frequency * 1000);
 };
 
 
@@ -326,4 +326,11 @@ FactoryMenu.prototype.registrarEventosDefault = function(menuItem, indiceNivel) 
 		menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
 		menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
 	}
+};
+
+/**
+ * Callback mouseout
+ */
+FactoryMenu.prototype.abstractCallbackMouseOut = function() {
+	return jQuery.proxy(this.verificarMouseSobreMenu, this);
 };
