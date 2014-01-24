@@ -4,6 +4,18 @@
  * @author Sergio
  */
 
+
+/**
+ * Constantes
+ */
+var Constantes = {};
+Constantes.TAMANHO_EM_PX = false;
+Constantes.TAMANHO_EM_PC = true;
+Constantes.ORIENTACAO_HORIZONTAL = true;
+Constantes.ORIENTACAO_VERTICAL = false;
+Constantes.NAO_EXPANDIR_SUBNIVEL = false;
+Constantes.EXPANDIR_SUBNIVEL = true;
+
 /**
  * Itens de menu
  * Cada ítem de menu é uma instância dessa classe
@@ -311,18 +323,6 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 		return this.childMenuItem != null && this.childMenuItem.length != 0;
 	};
 };
-
-/**
- * Constantes
- */
-var Constantes = {};
-Constantes.TAMANHO_EM_PX = false;
-Constantes.TAMANHO_EM_PC = true;
-Constantes.ORIENTACAO_HORIZONTAL = true;
-Constantes.ORIENTACAO_VERTICAL = false;
-Constantes.NAO_EXPANDIR_SUBNIVEL = false;
-Constantes.EXPANDIR_SUBNIVEL = true;
-
 
 /**
  * Classe nível, essa classe representa os níveis da árvore de menu,
