@@ -134,6 +134,7 @@ MenuItem.prototype.insertNivelZeroMenu = function(div){
 		this.elementoInicial.append(div);
 		break;
 	default:
+		this.elementoInicial.prepend(div);
 		break;
 	}
 };

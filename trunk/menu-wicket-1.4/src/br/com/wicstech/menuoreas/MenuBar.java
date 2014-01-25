@@ -26,9 +26,9 @@ import org.apache.wicket.util.string.JavascriptUtils;
  * 
  */
 public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
+	private static final long serialVersionUID = 407350644693710014L;
 
-	private static final long serialVersionUID = -8683400812756686255L;
-
+	private static final String FECHA_CHAMADA = ");";
 	private static final String QUEBRA_LINHA = "\r\n";
 	private static final char VIRGULA = ',';
 	private static final String VARIABLE_PREFIX = "m";
@@ -42,7 +42,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 
 	private String idContainer;
 	private String menuGroup;
-	private String insertPosition = "top";
+	private InsertPosition insertPosition = InsertPosition.TOP;
 
 	private List<Nivel> niveis = new ArrayList<Nivel>();
 
@@ -125,10 +125,20 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			throw new IllegalArgumentException("É necessário fornecer ao menos um nível para determinar as configurações do menu!");
 		}
 		String varFactoryMenu = "factory" + menuGroup;
-		javascript.append("var " + varFactoryMenu + " = new FactoryMenu(menus, \"" + menuGroup + "\", \"" + idContainer + "\", \"" + insertPosition + "\");");
+		javascript.append("var ");
+		javascript.append(varFactoryMenu);
+		javascript.append("=new FactoryMenu(menus,");
+		javascript.append(getStringParam(menuGroup));
+		javascript.append(VIRGULA);
+		javascript.append(getStringParam(idContainer));
+		javascript.append(VIRGULA);
+		javascript.append(getStringParam(insertPosition.name().toLowerCase()));
+		javascript.append(FECHA_CHAMADA);
+
 		adicionarQuebraLinha(javascript);
 		for (Nivel nivel : this.niveis) {
-			javascript.append(varFactoryMenu + ".addNivel(new Nivel(");
+			javascript.append(varFactoryMenu);
+			javascript.append(".addNivel(new Nivel(");
 			javascript.append(nivel.getOrientacao());
 
 			javascript.append(VIRGULA);
@@ -159,10 +169,11 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 				javascript.append(nivel.getAjusteDistanciaMenu());
 				javascript.append(')');
 			}
-			javascript.append(");");
+			javascript.append(FECHA_CHAMADA);
 			adicionarQuebraLinha(javascript);
 		}
-		javascript.append(varFactoryMenu + ".construirMenu()");
+		javascript.append(varFactoryMenu);
+		javascript.append(".construirMenu()");
 	}
 
 	private String getStringParam(CharSequence valor) {
@@ -206,7 +217,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(menuItem.getOnmouseout());
 			javascript.append(VIRGULA);
 			javascript.append(getStringParam(menuItem.getAlign()));
-			javascript.append(");");
+			javascript.append(FECHA_CHAMADA);
 			adicionarQuebraLinha(javascript);
 			if (menuItem.getToolTip() != null) {
 				javascript.append(menuName);
@@ -219,12 +230,12 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 				javascript.append(menuName);
 				javascript.append(".setParentMenuItem(");
 				javascript.append(parentMenu);
-				javascript.append(");");
+				javascript.append(FECHA_CHAMADA);
 				adicionarQuebraLinha(javascript);
 			} else {
 				javascript.append("menus.push(");
 				javascript.append(menuName);
-				javascript.append(");");
+				javascript.append(FECHA_CHAMADA);
 				adicionarQuebraLinha(javascript);
 			}
 			buildJsMenu(menuItem.getSubMenus(), javascript, menuName);
@@ -245,21 +256,6 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			return RequestCycle.get().urlFor(imagem);
 		}
 		return null;
-	}
-
-	/**
-	 * @return the insertPosition
-	 */
-	public String getInsertPosition() {
-		return insertPosition;
-	}
-
-	/**
-	 * @param insertPosition
-	 *            the insertPosition to set
-	 */
-	public void setInsertPosition(String position) {
-		this.insertPosition = position;
 	}
 
 	/**
@@ -284,5 +280,31 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 		if (Application.DEVELOPMENT.equals(getApplication().getConfigurationType())) {
 			javascript.append(QUEBRA_LINHA);
 		}
+	}
+
+	/**
+	 * @param jsLibrary
+	 *            Biblioteca javascript que o menu deve utilizar, se não
+	 *            informado o padrão é o prototype.
+	 */
+	public void setJsLibrary(JSLibrary jsLibrary) {
+		this.jsLibrary = jsLibrary;
+	}
+
+	/**
+	 * @return the insertPosition
+	 */
+	public InsertPosition getInsertPosition() {
+		return insertPosition;
+	}
+
+	/**
+	 * @param insertPosition
+	 *            the insertPosition to set
+	 * @return
+	 */
+	public MenuBar setInsertPosition(InsertPosition insertPosition) {
+		this.insertPosition = insertPosition;
+		return this;
 	}
 }
