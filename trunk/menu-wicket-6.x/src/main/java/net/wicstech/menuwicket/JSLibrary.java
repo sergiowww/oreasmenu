@@ -1,5 +1,8 @@
 package net.wicstech.menuwicket;
 
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.JQueryResourceReference;
+import org.wicketstuff.jslibraries.JSReference;
 import org.wicketstuff.jslibraries.Library;
 import org.wicketstuff.jslibraries.VersionDescriptor;
 
@@ -10,20 +13,20 @@ import org.wicketstuff.jslibraries.VersionDescriptor;
  * 
  */
 public enum JSLibrary {
-	PROTOTYPE_JS(VersionDescriptor.exactVersion(Library.PROTOTYPE, 1, 7)),
+	PROTOTYPE_JS(JSReference.getReference(VersionDescriptor.exactVersion(Library.PROTOTYPE, 1, 7))),
 
-	JQUERY(VersionDescriptor.alwaysLatest(Library.JQUERY));
+	JQUERY(JQueryResourceReference.get());
 
-	private VersionDescriptor descriptor;
+	private ResourceReference descriptor;
 
-	private JSLibrary(VersionDescriptor descriptor) {
+	private JSLibrary(ResourceReference descriptor) {
 		this.descriptor = descriptor;
 	}
 
 	/**
 	 * @return the descriptor
 	 */
-	public VersionDescriptor getDescriptor() {
+	public ResourceReference getDescriptor() {
 		return descriptor;
 	}
 }
