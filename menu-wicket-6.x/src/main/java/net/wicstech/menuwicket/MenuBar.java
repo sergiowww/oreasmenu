@@ -36,7 +36,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	private static final JavaScriptResourceReference JS_MENU_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final JavaScriptResourceReference JS_COMMONS = new JavaScriptResourceReference(MenuBar.class, "js/commons.js");
 
-	private JSLibrary jsLibrary = JSLibrary.PROTOTYPE_JS;
+	private String jsLibrary = "PROTOTYPE_JS";
 
 	private String idContainer;
 	private String menuGroup;
@@ -94,12 +94,14 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.render(JavaScriptHeaderItem.forReference(jsLibrary.getDescriptor()));
+
+		JSLibrary lib = JSLibrary.valueOf(jsLibrary);
+		response.render(JavaScriptHeaderItem.forReference(lib.getDescriptor()));
 		response.render(JavaScriptHeaderItem.forReference(JS_COMMONS));
-		if (JSLibrary.JQUERY.equals(jsLibrary)) {
+		if (JSLibrary.JQUERY.equals(lib)) {
 			response.render(JavaScriptHeaderItem.forReference(JS_MENU_JQUERY));
 		}
-		if (JSLibrary.PROTOTYPE_JS.equals(jsLibrary)) {
+		if (JSLibrary.PROTOTYPE_JS.equals(lib)) {
 			response.render(JavaScriptHeaderItem.forReference(JS_MENU_PROTOTYPE));
 		}
 		renderMenu(response);
@@ -289,7 +291,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	 * @return
 	 */
 	public MenuBar setJsLibrary(JSLibrary jsLibrary) {
-		this.jsLibrary = jsLibrary;
+		this.jsLibrary = jsLibrary.name();
 		return this;
 	}
 
