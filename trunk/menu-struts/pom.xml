@@ -73,7 +73,7 @@
 					<resource>
 						<directory>../</directory>
 						<includes>
-							<include>oreasmenu.js</include>
+							<include>*.js</include>
 						</includes>
 						<targetPath>br/com/wicstech/strutsmenuoreas</targetPath>
 					</resource>
@@ -100,7 +100,7 @@
 								<configuration>
 									<nosuffix>true</nosuffix>
 									<includes>
-										<include>oreasmenu.js</include>
+										<include>*.js</include>
 									</includes>
 								</configuration>
 							</execution>
