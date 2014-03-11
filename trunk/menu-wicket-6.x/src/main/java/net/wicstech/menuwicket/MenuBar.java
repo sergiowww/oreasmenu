@@ -3,6 +3,7 @@ package net.wicstech.menuwicket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.wicket.Page;
@@ -183,6 +184,8 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 			javascript.append(nivel.isAlinharCoordenadaXMenuPai());
 			javascript.append(VIRGULA);
 			javascript.append(nivel.isExpandirSubNiveis());
+			javascript.append(VIRGULA);
+			javascript.append(getStringParam(ObjectUtils.toString(nivel.getEvento())));
 			javascript.append(')');
 			if (nivel.getAjusteDistanciaMenu() != null) {
 				javascript.append(".setAjusteDistanciaMenu(");

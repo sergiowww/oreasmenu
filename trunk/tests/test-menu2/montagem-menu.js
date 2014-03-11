@@ -99,9 +99,9 @@ MenuBar.menuBar6= function() {
 	var m4 = new MenuItem("P\u00F3s-leil\u00E3o", null, null, null, null, null, null, null, null, null);
 	menus.push(m4);
 	var factorymenuPrincipal = new FactoryMenu(menus, "menuPrincipal", "menuPrincipal", "top");
-	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel1", "menuNivel1-Hover", null, 120, 20, false, false, false));
-	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel2", "menuNivel2-Hover", null, null, null, false, false, false));
-	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel3", "menuNivel3", null, null, null, false, true, true));
-	factorymenuPrincipal.addNivel(new Nivel(false, "menuNivel4", "menuNivel4", null, null, null, false, true, false));
+	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel1", "menuNivel1-Hover", null, 120, 20, false, false, false, "ONCLICK"));
+	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel2", "menuNivel2-Hover", null, null, null, false, false, false, "ONCLICK"));
+	factorymenuPrincipal.addNivel(new Nivel(true, "menuNivel3", "menuNivel3", null, null, null, false, true, true, "ONCLICK"));
+	factorymenuPrincipal.addNivel(new Nivel(false, "menuNivel4", "menuNivel4", null, null, null, false, true, false, "ONCLICK"));
 	factorymenuPrincipal.construirMenu();
 };
