@@ -273,13 +273,19 @@ FactoryMenu.prototype.clonarUltimoNivel = function() {
  */
 FactoryMenu.prototype.registrarEventosDefault = function(menuItem, indiceNivel) {
 	Event.observe(window, "resize", menuItem.ajustarPosicao.bind(menuItem));
-	Event.observe(menuItem.divMenuItem, "mouseover", this.mouseOver.bind(this, menuItem, indiceNivel));
 	
-	Event.observe(menuItem.divMenuItem, "mouseover", this.registrarMouseOver.bind(this));
-	Event.observe(menuItem.divMenuItem, "mouseout", this.registrarMouseOut.bind(this));
-	if(menuItem.childArea != null){
-		Event.observe(menuItem.childArea, "mouseover", this.registrarMouseOver.bind(this));
-		Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
+	var tipoEvento = menuItem.nivel.eventoMostraArea;
+	if ("ONMOUSEOVER" == tipoEvento) {
+		Event.observe(menuItem.divMenuItem, "mouseover", this.mouseOver.bind(this, menuItem, indiceNivel));
+		
+		Event.observe(menuItem.divMenuItem, "mouseover", this.registrarMouseOver.bind(this));
+		Event.observe(menuItem.divMenuItem, "mouseout", this.registrarMouseOut.bind(this));
+		if(menuItem.childArea != null){
+			Event.observe(menuItem.childArea, "mouseover", this.registrarMouseOver.bind(this));
+			Event.observe(menuItem.childArea, "mouseout", this.registrarMouseOut.bind(this));
+		}
+	} else if ("ONCLICK" == tipoEvento) {
+		Event.observe(menuItem.divMenuItem, "click", this.mouseOver.bind(this, menuItem, indiceNivel));
 	}
 };
 

@@ -166,8 +166,12 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
 	 * @type String
 	 */
 	this.menuGroup = null;
-
 	
+	/**
+	 * @type FactoryMenu
+	 */
+	this.factoryMenu = null;
+
 	/**
 	 * Setar o pai desse menu item
 	 * @param {MenuItem} menuItem
@@ -344,9 +348,10 @@ function MenuItem(titulo, imagem, width, height, pagina, target, onClick, onMous
  * @param {Number} tamanhoRelativo  indica se as dimensões dos itens de menu é em % ou em px.
  * @param {Boolean} alinharCoordenadaXMenuPai
  * @param {Boolean} expandirSubNiveis
+ * @param {String} eventoMostraArea
  * 
  */
-function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo, alinharCoordenadaXMenuPai, expandirSubNiveis){
+function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, tamanhoRelativo, alinharCoordenadaXMenuPai, expandirSubNiveis, eventoMostraArea){
 	/**
 	 * Indicar se é o nível inicial
 	 * @type Boolean
@@ -438,6 +443,12 @@ function Nivel(orientacao, estilo, estiloHover, imagemSeta, width, height, taman
 	this.ajusteDistanciaMenu = 0;
 	
 	/**
+	 * Tipo do evento necessário para mostrar o próximo submenu.
+	 * @type String
+	 */
+	this.eventoMostraArea = eventoMostraArea == undefined ? "ONMOUSEOVER" : eventoMostraArea;
+	
+	/**
 	 * Verificar se a orientação é horizontal ou vertical
 	 * @returns 
 	 * @type Boolean
@@ -506,6 +517,11 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 	 */
 	this.menuGroup = menuGroup;
 	
+	/**
+	 * Item de menu ativo, essa propriedade só é utilizada quando o menu é ativado no onclick.
+	 * @type MenuItem
+	 */
+	this.menuItemAtivo = null;
 	
 	/**
 	 * Retorna o objeto nível relativo ao índice passado, se não existir retorna o último
@@ -582,6 +598,7 @@ function FactoryMenu(menus, menuGroup, parentElement, insertion) {
 			 */
 			var menuItem = menus[i];
 			menuItem.menuGroup = this.menuGroup;
+			menuItem.factoryMenu = this;
 			var nivel = this.getNivel(indiceNivel, true);
 			if(indiceNivel == 0){
 				nivel.nivelInicial = true;

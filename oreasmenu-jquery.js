@@ -318,15 +318,21 @@ FactoryMenu.prototype.clonarUltimoNivel = function() {
 FactoryMenu.prototype.registrarEventosDefault = function(menuItem, indiceNivel) {
 	$(window).resize(jQuery.proxy(menuItem.ajustarPosicao, menuItem));
 	
-	menuItem.divMenuItem.mouseover(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
-	
-	menuItem.divMenuItem.mouseover(jQuery.proxy(this.registrarMouseOver, this));
-	menuItem.divMenuItem.mouseout(jQuery.proxy(this.registrarMouseOut, this));
-	
-	if(menuItem.childArea != null){
-		menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
-		menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
+	var tipoEvento = menuItem.nivel.eventoMostraArea;
+	if ("ONMOUSEOVER" == tipoEvento) {
+		menuItem.divMenuItem.mouseover(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
+		
+		menuItem.divMenuItem.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+		menuItem.divMenuItem.mouseout(jQuery.proxy(this.registrarMouseOut, this));
+		
+		if(menuItem.childArea != null){
+			menuItem.childArea.mouseover(jQuery.proxy(this.registrarMouseOver, this));
+			menuItem.childArea.mouseout(jQuery.proxy(this.registrarMouseOut, this));
+		}
+	} else if ("ONCLICK" == tipoEvento) {
+		menuItem.divMenuItem.click(jQuery.proxy(this.mouseOver, this, menuItem, indiceNivel));
 	}
+	
 };
 
 /**

@@ -36,6 +36,11 @@ public class Nivel implements Serializable {
 	private boolean alinharCoordenadaXMenuPai = true;
 
 	/**
+	 * Tipo do evento que mostra o próximo subnível.
+	 */
+	private EventoExibirSubMenu evento = EventoExibirSubMenu.ONMOUSEOVER;
+
+	/**
 	 * Imagem da seta.
 	 */
 	private ResourceReference imagemSeta;
@@ -43,27 +48,27 @@ public class Nivel implements Serializable {
 	/**
 	 * Classe de estilo padrão do item de menu.
 	 */
-	private String styleClass,
+	private String styleClass;
 
 	/**
 	 * Classe de estilo quando o mouse está acima do item de menu.
 	 */
-	styleClassHover;
+	private String styleClassHover;
 
 	/**
 	 * Largura padrão do item de menu.
 	 */
-	private Integer widthDefault,
+	private Integer widthDefault;
 
 	/**
 	 * Altura padrão do item de menu.
 	 */
-	heightDefault,
+	private Integer heightDefault;
 
 	/**
 	 * Ajuste de distância do submenu para o menu.
 	 */
-	ajusteDistanciaMenu;
+	private Integer ajusteDistanciaMenu;
 
 	public Nivel(Orientacao orientacao, String styleClass, String styleClassHover, ResourceReference imagemSeta, Integer widthDefault, Integer heightDefault) {
 		super();
@@ -85,7 +90,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param orientacao
 	 *            the orientacao to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setOrientacao(Orientacao orientacao) {
 		this.orientacao = orientacao;
@@ -102,7 +107,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param imagemSeta
 	 *            the imagemSeta to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setImagemSeta(ResourceReference imagemSeta) {
 		this.imagemSeta = imagemSeta;
@@ -119,7 +124,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param styleClass
 	 *            the styleClass to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
@@ -136,7 +141,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param styleClassHover
 	 *            the styleClassHover to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setStyleClassHover(String styleClassHover) {
 		this.styleClassHover = styleClassHover;
@@ -153,7 +158,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param widthDefault
 	 *            the widthDefault to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setWidthDefault(Integer widthDefault) {
 		this.widthDefault = widthDefault;
@@ -170,7 +175,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param heightDefault
 	 *            the heightDefault to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setHeightDefault(Integer heightDefault) {
 		this.heightDefault = heightDefault;
@@ -187,7 +192,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param tamanhoRelativo
 	 *            the tamanhoRelativo to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setTamanhoRelativo(boolean tamanhoRelativo) {
 		this.tamanhoRelativo = tamanhoRelativo;
@@ -213,7 +218,7 @@ public class Nivel implements Serializable {
 	/**
 	 * @param alinharCoordenadaXMenuPai
 	 *            the alinharCoordenadaXMenuPai to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setAlinharCoordenadaXMenuPai(boolean alinharCoordenadaXMenuPai) {
 		this.alinharCoordenadaXMenuPai = alinharCoordenadaXMenuPai;
@@ -230,10 +235,32 @@ public class Nivel implements Serializable {
 	/**
 	 * @param ajusteDistanciaMenu
 	 *            the ajusteDistanciaMenu to set
-	 * @return 
+	 * @return
 	 */
 	public Nivel setAjusteDistanciaMenu(Integer ajusteDistanciaMenu) {
 		this.ajusteDistanciaMenu = ajusteDistanciaMenu;
+		return this;
+	}
+
+	/**
+	 * Método responsável por retornar evento.
+	 * 
+	 * @return evento
+	 */
+	public EventoExibirSubMenu getEvento() {
+		return evento;
+	}
+
+	/**
+	 * Método responsável por definir o campo evento.
+	 * 
+	 * @param evento
+	 *            valor atribuído a evento
+	 * @return
+	 */
+
+	public Nivel setEvento(EventoExibirSubMenu evento) {
+		this.evento = evento;
 		return this;
 	}
 }
