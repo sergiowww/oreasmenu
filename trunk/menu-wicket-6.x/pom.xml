@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.wicstech</groupId>
 	<artifactId>menuoreas</artifactId>
-	<version>3.2.4</version>
+	<version>3.2.6</version>
 	<name>Componente Gerador de Menu</name>
 	<description>Gerador de menu Wicket</description>
 	<dependencies>
@@ -34,6 +34,20 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -84,4 +98,16 @@
 	<scm>
 		<url>https://oreasmenu.googlecode.com/svn/trunk/</url>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<id>conab</id>
+			<name>Conab Archiva</name>
+			<url>http://dfbsa40.conab.gov.br/archiva/repository/internal/</url>
+		</repository>
+		<snapshotRepository>
+			<id>conab</id>
+			<name>Conab Archiva</name>
+			<url>http://dfbsa40.conab.gov.br/archiva/repository/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
