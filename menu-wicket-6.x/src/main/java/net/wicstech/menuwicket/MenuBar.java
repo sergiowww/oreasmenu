@@ -37,7 +37,7 @@ public class MenuBar extends WebMarkupContainer implements IHeaderContributor {
 	private static final JavaScriptResourceReference JS_MENU_JQUERY = new JavaScriptResourceReference(MenuBar.class, "js/oreasmenu-jquery.js");
 	private static final JavaScriptResourceReference JS_COMMONS = new JavaScriptResourceReference(MenuBar.class, "js/commons.js");
 
-	private String jsLibrary = "PROTOTYPE_JS";
+	private String jsLibrary = JSLibrary.PROTOTYPE_JS.name();
 
 	private String idContainer;
 	private String menuGroup;
