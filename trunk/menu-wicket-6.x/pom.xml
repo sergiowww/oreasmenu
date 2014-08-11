@@ -6,6 +6,9 @@
 	<version>3.2.6</version>
 	<name>Componente Gerador de Menu</name>
 	<description>Gerador de menu Wicket</description>
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
