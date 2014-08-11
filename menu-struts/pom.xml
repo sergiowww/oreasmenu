@@ -4,6 +4,9 @@
 	<artifactId>strutsmenuoreas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>gerador de menus para Struts</description>
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>

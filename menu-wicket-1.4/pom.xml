@@ -5,6 +5,9 @@
 	<artifactId>menuoreas</artifactId>
 	<version>1.0</version>
 	<description>Menu javascript para Wicket</description>
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<finalName>menuoreas</finalName>
 		<sourceDirectory>src</sourceDirectory>
